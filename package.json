@@ -28,5 +28,8 @@
     "run-sequence": "^0.3.7",
     "sinon": "^1.10.3",
     "sinon-chai": "^2.5.0"
+  },
+  "dependencies": {
+    "shortid": "^2.1.2"
   }
 }
