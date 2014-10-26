@@ -1,4 +1,4 @@
-hoist-data-transforms
+hoist-data-pipeline
 =====================
 
-Data transforms between JSON data and Hoist Data Store
+Data pipeline between JSON data and Hoist Data Store
