@@ -34,6 +34,7 @@
     "bluebird": "^2.3.10",
     "config": "^1.6.0",
     "hoist-context": "git://github.com/hoist/hoist-context",
+    "hoist-errors": "git://github.com/hoist/hoist-errors",
     "mongodb": "^2.0.0",
     "shortid": "^2.1.2"
   }
