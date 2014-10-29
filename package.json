@@ -18,6 +18,7 @@
   "homepage": "https://github.com/hoist/hoist-data-pipeline",
   "devDependencies": {
     "chai": "^1.9.1",
+    "chai-as-promised": "^4.1.1",
     "gulp": "^3.8.8",
     "gulp-istanbul": "^0.3.1",
     "gulp-istanbul-enforcer": "^1.0.3",
@@ -30,6 +31,9 @@
     "sinon-chai": "^2.5.0"
   },
   "dependencies": {
+    "bluebird": "^2.3.10",
+    "config": "^1.6.0",
+    "hoist-context": "git://github.com/hoist/hoist-context",
     "mongodb": "^2.0.0",
     "shortid": "^2.1.2"
   }
