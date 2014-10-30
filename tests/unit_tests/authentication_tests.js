@@ -3,7 +3,7 @@ require('../bootstrap');
 var Context = require('hoist-context');
 var sinon = require('sinon');
 var expect = require('chai').expect;
-var authentication = require('../../lib/authentication');
+var authentication = require('../../lib/authentication')(Context);
 var BBPromise = require('bluebird');
 
 describe('Authentication', function () {
