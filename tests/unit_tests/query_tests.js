@@ -5,7 +5,7 @@ var Context = require('hoist-context');
 var mongoConnection = require('../../lib/mongo_connection');
 var BBPromise = require('bluebird');
 var expect = require('chai').expect;
-var queryApi = require('../../lib/query');
+var queryApi = require('../../lib/query')(Context);
 describe('query api', function () {
   var expectedResults = [{
     _id: 1
