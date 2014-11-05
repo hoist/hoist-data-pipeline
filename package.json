@@ -38,6 +38,7 @@
     "hoist-errors": "git://github.com/hoist/hoist-errors",
     "lodash": "^2.4.1",
     "mongodb": "^2.0.0",
+    "pluralize": "^1.0.3",
     "shortid": "^2.1.2"
   }
 }

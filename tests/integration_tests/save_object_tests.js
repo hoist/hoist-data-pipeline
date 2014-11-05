@@ -63,7 +63,7 @@ describe('saving a hoist object', function () {
                 connection.close();
               }), function (connection) {
                 var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:global:person'));
+                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
                 return collection.findOneAsync({}).then(function (obj) {
                   return obj;
                 });
@@ -88,7 +88,7 @@ describe('saving a hoist object', function () {
           connection.close();
         }), function (connection) {
           var db = connection.db('datakey');
-          var collection = BBPromise.promisifyAll(db.collection('live:global:person'));
+          var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
           return collection.countAsync().then(function (count) {
             return expect(count).to.eql(1);
           });
@@ -174,7 +174,7 @@ describe('saving a hoist object', function () {
                 connection.close();
               }), function (connection) {
                 var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:person'));
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
                 return collection.findOneAsync({}).then(function (obj) {
                   return obj;
                 });
@@ -199,7 +199,7 @@ describe('saving a hoist object', function () {
           connection.close();
         }), function (connection) {
           var db = connection.db('datakey');
-          var collection = BBPromise.promisifyAll(db.collection('live:bucketid:person'));
+          var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
           return collection.countAsync().then(function (count) {
             return expect(count).to.eql(1);
           });
@@ -291,7 +291,7 @@ describe('saving a hoist object', function () {
                 connection.close();
               }), function (connection) {
                 var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:person'));
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
                 return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
               });
           }).nodeify(done);
@@ -314,7 +314,7 @@ describe('saving a hoist object', function () {
           connection.close();
         }), function (connection) {
           var db = connection.db('datakey');
-          var collection = BBPromise.promisifyAll(db.collection('live:bucketid:person'));
+          var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
           return collection.countAsync().then(function (count) {
             return expect(count).to.eql(2);
           });
@@ -412,7 +412,7 @@ describe('saving a hoist object', function () {
                 connection.close();
               }), function (connection) {
                 var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:person'));
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
                 return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
               });
           }).nodeify(function(err){

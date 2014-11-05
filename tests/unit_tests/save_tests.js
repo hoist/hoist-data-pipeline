@@ -14,7 +14,7 @@ describe('save', function () {
       },
       environment: 'dev',
       bucket: {
-        key: 'bucket'
+        _id: 'bucket'
       }
     });
 
@@ -33,12 +33,19 @@ describe('save', function () {
       sinon.stub(mongoConnection, 'getConnection').returns(BBPromise.resolve(stubConnection).disposer(function (connection) {
         connection.close();
       }));
-      saveApi.apply({_id:'myid',_type:'type',name:'name'});
+      saveApi.apply({
+        _id: 'myid',
+        _type: 'type',
+        name: 'name'
+      });
     });
     after(function () {
       clock.restore();
       mongoConnection.getConnection.restore();
       Context.get.restore();
+    });
+    it('uses correct collection', function () {
+      expect(stubConnection.collection).to.have.been.calledWith('dev:bucket:types');
     });
     it('saves the object', function () {
       return expect(stubConnection.updateOne)
@@ -47,10 +54,10 @@ describe('save', function () {
         }, {
           $set: {
             name: 'name',
-            _type:'type'
+            _type: 'type'
           },
-          $setOnInsert:{
-            _createdDate:new Date()
+          $setOnInsert: {
+            _createdDate: new Date()
           }
         }, {
           upsert: true
