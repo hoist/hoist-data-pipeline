@@ -205,7 +205,7 @@ describe('integration', function () {
               });
           });
           it('returns NULL', function () {
-            return expect(_result).to.eql(null);
+            return expect(_result).to.be.null;
           });
         });
       });
@@ -299,23 +299,105 @@ describe('integration', function () {
           });
         });
         describe('when many objects exist', function () {
-          it('returns the first object');
+          var _result;
+          before(function (done) {
+            BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                return collection.insertManyAsync([{
+                  _id: 'jamie.wilson',
+                  name: 'jamie',
+                  _createdDate: new Date(),
+                  _updatedDate: new Date()
+                }, {
+                  _id: 'owen.evans',
+                  name: 'owen',
+                  _createdDate: new Date(),
+                  _updatedDate: new Date()
+                }]);
+              })
+              .then(function () {
+                hoistContext.namespace.run(function () {
+                  setContext().then(function () {
+                    pipeline.findOne('person', {
+
+                    }).nodeify(function (err, result) {
+                      _result = result;
+                      done(err);
+                    });
+                  });
+                });
+              });
+          });
+          after(function () {
+            return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = BBPromise.promisifyAll(connection.db('datakey'));
+                return db.dropDatabase();
+              });
+          });
+          it('returns the first object', function () {
+            return expect(_result.name).to.eql('jamie');
+          });
         });
         describe('when no object exists', function () {
-          it('returns NULL');
+          var _result;
+          before(function (done) {
+
+            hoistContext.namespace.run(function () {
+              setContext().then(function () {
+                pipeline.findOne('person', {
+
+                }).nodeify(function (err, result) {
+                  _result = result;
+                  done(err);
+                });
+              });
+            });
+          });
+          after(function () {
+            return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = BBPromise.promisifyAll(connection.db('datakey'));
+                return db.dropDatabase();
+              });
+          });
+          it('returns NULL',function(){
+            return expect(_result).to.be.null;
+          });
         });
       });
       describe('without GlobalRead claim', function () {
-        before(function () {
+        var error;
+        before(function (done) {
           member.roles.bucketRoles = [{
             bucket: bucket._id,
             role: reader._id
           }];
+          hoistContext.namespace.run(function () {
+              setContext().then(function () {
+                pipeline.findOne('person', {
+
+                }).nodeify(function (err) {
+                  error = err;
+                  done();
+                });
+              });
+            });
         });
         after(function () {
           member.roles = {};
         });
-        it('throws permission error');
+        it('throws permission error',function(){
+          expect(error.message).to.eql('Current user does not have permission to Read Global Data');
+        });
       });
     });
   });
