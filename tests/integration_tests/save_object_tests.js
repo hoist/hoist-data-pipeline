@@ -349,4 +349,96 @@ describe('saving a hoist object', function () {
       });
     });
   });
+  describe('without permission', function () {
+    var pipeline = require('../../lib/pipeline')();
+    var clock;
+    var error;
+    before(function (done) {
+      clock = sinon.useFakeTimers(new Date().getTime());
+      var type = 'Person';
+      var objects = [{
+        _id: 'owen.evans',
+        name: 'Owen',
+        position: 'CTO'
+      }, {
+        _id: 'amelia.lundy',
+        name: 'Amelia',
+        position: 'Developer'
+      }];
+      hoistContext.namespace.run(function () {
+        return hoistContext.get().then(function (context) {
+            var application = new Application({
+              _id: 'applicationid',
+              dataKey: 'datakey',
+              anonymousPermissions: {
+                live: []
+              }
+            });
+            context.bucket = new Bucket({
+              _id: 'bucketid',
+              application: application._id,
+              environment: 'live'
+            });
+            var role = new Role({
+              _id: 'roleid',
+              application: application._id,
+              environment: 'live',
+              claims: ['DataRead']
+            });
+            context.member = new Member({
+              _id: 'memberid',
+              application: 'application',
+              environment: 'live',
+              emailAddresses: [{
+                address: 'owen@hoist.io',
+                verified: true
+              }],
+              roles: {
+                bucketRoles: [{
+                  bucket: context.bucket._id,
+                  role: role._id
+                }]
+              }
+            });
+
+            context.roles = [role];
+            context.application = application;
+          })
+          .then(function () {
+            return pipeline.save(type, objects);
+          }).finally(function () {
+            loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:person'));
+                return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
+              });
+          }).nodeify(function(err){
+            error = err;
+            done();
+          });
+      });
+    });
+    var loadObject;
+    after(function () {
+      clock.restore();
+      return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+        .disposer(function (connection) {
+          connection.close();
+        }), function (connection) {
+          var db = BBPromise.promisifyAll(connection.db('datakey'));
+          return db.dropDatabase();
+        });
+    });
+    it('does not create object',function(){
+      return loadObject.then(function(res){
+        return expect(res.length).to.eql(0);
+      });
+    });
+    it('throws permission error',function(){
+      expect(error.message).to.eql('Current user does not have permission to Write Data');
+    });
+  });
 });
