@@ -124,7 +124,6 @@ describe('saving a hoist object', function () {
       clock = sinon.useFakeTimers(new Date().getTime());
       var type = 'Person';
       var object = {
-        _id: 'owen.evans',
         name: 'Owen',
         position: 'CTO'
       };
@@ -208,7 +207,8 @@ describe('saving a hoist object', function () {
     });
     it('save the object properties', function () {
       return loadObject.then(function (obj) {
-        expect(obj._id).to.eql('owen.evans');
+        /*jshint -W030 */
+        expect(obj._id).to.exist;
         expect(obj.name).to.eql('Owen');
         expect(obj.position).to.eql('CTO');
       });

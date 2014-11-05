@@ -46,7 +46,6 @@ describe('save', function () {
           _id: 'myid'
         }, {
           $set: {
-            _id: 'myid',
             name: 'name',
             _type:'type'
           },
