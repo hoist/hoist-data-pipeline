@@ -24,6 +24,7 @@
     "gulp-istanbul-enforcer": "^1.0.3",
     "gulp-jshint": "^1.8.4",
     "gulp-mocha": "^1.1.0",
+    "hoist-model": "git://github.com/hoist/hoist-model",
     "jshint-growl-reporter": "^0.1.1",
     "jshint-stylish": "^1.0.0",
     "run-sequence": "^0.3.7",
@@ -35,6 +36,7 @@
     "config": "^1.6.0",
     "hoist-context": "git://github.com/hoist/hoist-context",
     "hoist-errors": "git://github.com/hoist/hoist-errors",
+    "lodash": "^2.4.1",
     "mongodb": "^2.0.0",
     "shortid": "^2.1.2"
   }
