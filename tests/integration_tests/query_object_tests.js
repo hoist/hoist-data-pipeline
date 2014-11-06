@@ -459,10 +459,80 @@ describe('integration', function () {
           });
         });
         describe('when many objects exist', function () {
-          it('returns array with many entries object');
+          var _result;
+          before(function (done) {
+            BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                return collection.insertManyAsync([{
+                  _id: 'jamie.wilson',
+                  name: 'jamie',
+                  _createdDate: new Date(),
+                  _updatedDate: new Date()
+                }, {
+                  _id: 'owen.evans',
+                  name: 'owen',
+                  _createdDate: new Date(),
+                  _updatedDate: new Date()
+                }]);
+              })
+              .then(function () {
+                hoistContext.namespace.run(function () {
+                  setContext().then(function () {
+                    pipeline.find('person', {
+
+                    }).nodeify(function (err, result) {
+                      _result = result;
+                      done(err);
+                    });
+                  });
+                });
+              });
+          });
+          after(function () {
+            return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = BBPromise.promisifyAll(connection.db('datakey'));
+                return db.dropDatabase();
+              });
+          });
+          it('returns array with many entries object', function () {
+            expect(_result.length).to.eql(2);
+            expect(_result).to.contain({
+              _id: 'jamie.wilson',
+              name: 'jamie',
+              _createdDate: new Date(),
+              _updatedDate: new Date()
+            }, {
+              _id: 'owen.evans',
+              name: 'owen',
+              _createdDate: new Date(),
+              _updatedDate: new Date()
+            });
+          });
         });
         describe('when no object exists', function () {
-          it('returns empty array');
+          var _result;
+          before(function (done) {
+            hoistContext.namespace.run(function () {
+              setContext().then(function () {
+                pipeline.find('person', {
+
+                }).nodeify(function (err, result) {
+                  _result = result;
+                  done(err);
+                });
+              });
+            });
+          });
+          it('returns empty array', function () {
+            expect(_result).to.eql([]);
+          });
         });
       });
       describe('without Read claim', function () {
@@ -553,11 +623,81 @@ describe('integration', function () {
             });
           });
         });
-        describe('when many objects exist', function () {
-          it('returns array with many entries object');
+       describe('when many objects exist', function () {
+          var _result;
+          before(function (done) {
+            BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                return collection.insertManyAsync([{
+                  _id: 'jamie.wilson',
+                  name: 'jamie',
+                  _createdDate: new Date(),
+                  _updatedDate: new Date()
+                }, {
+                  _id: 'owen.evans',
+                  name: 'owen',
+                  _createdDate: new Date(),
+                  _updatedDate: new Date()
+                }]);
+              })
+              .then(function () {
+                hoistContext.namespace.run(function () {
+                  setContext().then(function () {
+                    pipeline.find('person', {
+
+                    }).nodeify(function (err, result) {
+                      _result = result;
+                      done(err);
+                    });
+                  });
+                });
+              });
+          });
+          after(function () {
+            return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }), function (connection) {
+                var db = BBPromise.promisifyAll(connection.db('datakey'));
+                return db.dropDatabase();
+              });
+          });
+          it('returns array with many entries object', function () {
+            expect(_result.length).to.eql(2);
+            expect(_result).to.contain({
+              _id: 'jamie.wilson',
+              name: 'jamie',
+              _createdDate: new Date(),
+              _updatedDate: new Date()
+            }, {
+              _id: 'owen.evans',
+              name: 'owen',
+              _createdDate: new Date(),
+              _updatedDate: new Date()
+            });
+          });
         });
         describe('when no object exists', function () {
-          it('returns empty array');
+          var _result;
+          before(function (done) {
+            hoistContext.namespace.run(function () {
+              setContext().then(function () {
+                pipeline.find('person', {
+
+                }).nodeify(function (err, result) {
+                  _result = result;
+                  done(err);
+                });
+              });
+            });
+          });
+          it('returns empty array', function () {
+            expect(_result).to.eql([]);
+          });
         });
       });
       describe('without GlobalRead claim', function () {
