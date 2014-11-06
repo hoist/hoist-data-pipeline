@@ -16,6 +16,7 @@ describe('integration', function () {
     describe('without a bucket', function () {
       var pipeline = require('../../lib/pipeline')(hoistContext);
       var clock;
+      var _returnedObject;
       before(function (done) {
         clock = sinon.useFakeTimers(new Date().getTime());
         var type = 'Person';
@@ -58,7 +59,8 @@ describe('integration', function () {
             })
             .then(function () {
               return pipeline.save(type, object);
-            }).then(function () {
+            }).then(function (returnedObject) {
+              _returnedObject = returnedObject;
               loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
                 .disposer(function (connection) {
                   connection.close();
@@ -82,6 +84,16 @@ describe('integration', function () {
             var db = BBPromise.promisifyAll(connection.db('datakey'));
             return db.dropDatabase();
           });
+      });
+      it('returns the saved object', function () {
+        return expect(_returnedObject).to.eql({
+          _createdDate: new Date(),
+          _id: "owen.evans",
+          _type: "person",
+          _updatedDate: new Date(),
+          name: "Owen",
+          position: "CTO"
+        });
       });
       it('saves the object', function () {
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
@@ -231,6 +243,7 @@ describe('integration', function () {
       });
     });
     describe('with an array of objects', function () {
+      var _returnedObjects;
       var pipeline = require('../../lib/pipeline')();
       var clock;
       before(function (done) {
@@ -286,7 +299,8 @@ describe('integration', function () {
             })
             .then(function () {
               return pipeline.save(type, objects);
-            }).then(function () {
+            }).then(function (saved) {
+              _returnedObjects = saved;
               loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
                 .disposer(function (connection) {
                   connection.close();
@@ -308,6 +322,9 @@ describe('integration', function () {
             var db = BBPromise.promisifyAll(connection.db('datakey'));
             return db.dropDatabase();
           });
+      });
+      it('returns the saved objects', function () {
+        return expect(_returnedObjects.length).to.eql(2);
       });
       it('saves the objects', function () {
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
