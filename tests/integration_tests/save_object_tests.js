@@ -5,7 +5,7 @@ var MongoClient = BBPromise.promisifyAll(require('mongodb').MongoClient);
 var config = require('config');
 var hoistContext = require('hoist-context');
 var Application = require('hoist-model').Application;
-var Member = require('hoist-model').Member;
+var Member = require('hoist-model').AppUser;
 var Bucket = require('hoist-model').Bucket;
 var Role = require('hoist-model').Role;
 
