@@ -5,7 +5,7 @@ var MongoClient = BBPromise.promisifyAll(require('mongodb').MongoClient);
 var config = require('config');
 var hoistContext = require('hoist-context');
 var Application = require('hoist-model').Application;
-var Member = require('hoist-model').AppUser;
+var AppUser = require('hoist-model').AppUser;
 var Bucket = require('hoist-model').Bucket;
 var Role = require('hoist-model').Role;
 
@@ -40,7 +40,7 @@ describe('integration', function () {
                 environment: 'live',
                 claims: ['DataGlobalWrite']
               });
-              context.member = new Member({
+              context.user = new AppUser({
                 _id: 'memberid',
                 application: 'application',
                 environment: 'live',
@@ -160,7 +160,7 @@ describe('integration', function () {
                 environment: 'live',
                 claims: ['DataWrite']
               });
-              context.member = new Member({
+              context.user = new AppUser({
                 _id: 'memberid',
                 application: 'application',
                 environment: 'live',
@@ -278,7 +278,7 @@ describe('integration', function () {
                 environment: 'live',
                 claims: ['DataWrite']
               });
-              context.member = new Member({
+              context.user = new AppUser({
                 _id: 'memberid',
                 application: 'application',
                 environment: 'live',
@@ -403,7 +403,7 @@ describe('integration', function () {
                 environment: 'live',
                 claims: ['DataRead']
               });
-              context.member = new Member({
+              context.user = new AppUser({
                 _id: 'memberid',
                 application: 'application',
                 environment: 'live',
@@ -511,7 +511,7 @@ describe('integration', function () {
                     environment: 'live',
                     claims: ['DataWrite']
                   });
-                  context.member = new Member({
+                  context.user = new AppUser({
                     _id: 'memberid',
                     application: 'application',
                     environment: 'live',

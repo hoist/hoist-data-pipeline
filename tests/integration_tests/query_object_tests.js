@@ -6,7 +6,7 @@ var model = require('hoist-model');
 var Application = model.Application;
 var Bucket = model.Bucket;
 var Role = model.Role;
-var Member = model.AppUser;
+var AppUser = model.AppUser;
 var MongoClient = BBPromise.promisifyAll(require('mongodb').MongoClient);
 var config = require('config');
 var expect = require('chai').expect;
@@ -18,7 +18,7 @@ describe('integration', function () {
     setContext = function () {
       return hoistContext.get().then(function (context) {
         context.bucket = bucket;
-        context.member = member;
+        context.user = user;
         context.application = application;
         context.roles = roles;
         return context;
@@ -53,7 +53,7 @@ describe('integration', function () {
     environment: 'live',
     claims: ['DataGlobalRead']
   });
-  var member = new Member({
+  var user = new AppUser({
     _id: 'memberid',
     application: 'application',
     environment: 'live',
@@ -81,13 +81,13 @@ describe('integration', function () {
       });
       describe('with Read claim', function () {
         before(function () {
-          member.roles.bucketRoles = [{
+          user.roles.bucketRoles = [{
             bucket: bucket._id,
             role: reader._id
           }];
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         describe('when object exists', function () {
           var _result;
@@ -210,7 +210,7 @@ describe('integration', function () {
       describe('without Read claim', function () {
         var error;
         before(function (done) {
-          member.roles.bucketRoles = [{
+          user.roles.bucketRoles = [{
             bucket: bucket._id,
             role: globalReader._id
           }];
@@ -226,7 +226,7 @@ describe('integration', function () {
           });
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         it('throws a permission error', function () {
           return expect(error.message).to.eql('Current user does not have permission to Read Data');
@@ -249,10 +249,10 @@ describe('integration', function () {
       });
       describe('with GlobalRead claim', function () {
         before(function () {
-          member.roles.mainRole = globalReader._id;
+          user.roles.mainRole = globalReader._id;
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         describe('when object exists', function () {
           var _result;
@@ -375,7 +375,7 @@ describe('integration', function () {
       describe('without GlobalRead claim', function () {
         var error;
         before(function (done) {
-          member.roles.bucketRoles = [{
+          user.roles.bucketRoles = [{
             bucket: bucket._id,
             role: reader._id
           }];
@@ -391,7 +391,7 @@ describe('integration', function () {
           });
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         it('throws permission error', function () {
           expect(error.message).to.eql('Current user does not have permission to Read Global Data');
@@ -404,13 +404,13 @@ describe('integration', function () {
 
       describe('with Read claim', function () {
         before(function () {
-          member.roles.bucketRoles = [{
+          user.roles.bucketRoles = [{
             bucket: bucket._id,
             role: reader._id
           }];
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         describe('when object exists', function () {
           var _result;
@@ -538,7 +538,7 @@ describe('integration', function () {
       describe('without Read claim', function () {
         var error;
         before(function (done) {
-          member.roles.mainRole = globalReader._id;
+          user.roles.mainRole = globalReader._id;
           hoistContext.namespace.run(function () {
             setContext().then(function () {
               pipeline.find('person', {}).nodeify(function (err) {
@@ -549,7 +549,7 @@ describe('integration', function () {
           });
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         it('throws permission error', function () {
           expect(error.message).to.eql('Current user does not have permission to Read Data');
@@ -572,10 +572,10 @@ describe('integration', function () {
       });
       describe('with GlobalRead claim', function () {
         before(function () {
-          member.roles.mainRole = globalReader._id;
+          user.roles.mainRole = globalReader._id;
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         describe('when object exists', function () {
           var _result;
@@ -703,7 +703,7 @@ describe('integration', function () {
       describe('without GlobalRead claim', function () {
         var error;
         before(function (done) {
-          member.roles.mainRole = reader._id;
+          user.roles.mainRole = reader._id;
           hoistContext.namespace.run(function () {
             setContext().then(function () {
               pipeline.find('person', {
@@ -716,7 +716,7 @@ describe('integration', function () {
           });
         });
         after(function () {
-          member.roles = {};
+          user.roles = {};
         });
         it('throws permission error', function () {
           expect(error.message).to.eql('Current user does not have permission to Read Global Data');
