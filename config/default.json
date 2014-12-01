@@ -3,8 +3,8 @@
     "mongo": {
       "db": "mongodb://localhost/hoist-default"
     },
-    "data":{
-      "checkAuth":false
+    "data": {
+      "checkAuth": false
     }
   }
 }
