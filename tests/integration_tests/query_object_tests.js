@@ -93,18 +93,19 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                return collection.insertOneAsync({
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                });
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                  return collection.insertOneAsync({
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  });
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -122,7 +123,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -135,23 +137,24 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                return collection.insertManyAsync([{
-                  _id: 'jamie.wilson',
-                  name: 'jamie',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }, {
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }]);
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                  return collection.insertManyAsync([{
+                    _id: 'jamie.wilson',
+                    name: 'jamie',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }, {
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }]);
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -169,7 +172,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -197,7 +201,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -258,18 +263,19 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
-                return collection.insertOneAsync({
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                });
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                  return collection.insertOneAsync({
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  });
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -287,7 +293,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -300,23 +307,24 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
-                return collection.insertManyAsync([{
-                  _id: 'jamie.wilson',
-                  name: 'jamie',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }, {
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }]);
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                  return collection.insertManyAsync([{
+                    _id: 'jamie.wilson',
+                    name: 'jamie',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }, {
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }]);
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -334,7 +342,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -362,7 +371,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -416,18 +426,19 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                return collection.insertOneAsync({
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                });
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                  return collection.insertOneAsync({
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  });
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -443,7 +454,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -462,23 +474,24 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                return collection.insertManyAsync([{
-                  _id: 'jamie.wilson',
-                  name: 'jamie',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }, {
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }]);
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                  return collection.insertManyAsync([{
+                    _id: 'jamie.wilson',
+                    name: 'jamie',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }, {
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }]);
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -496,7 +509,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -581,18 +595,19 @@ describe('integration', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
-                return collection.insertOneAsync({
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                });
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                  return collection.insertOneAsync({
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  });
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -608,7 +623,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });
@@ -623,27 +639,28 @@ describe('integration', function () {
             });
           });
         });
-       describe('when many objects exist', function () {
+        describe('when many objects exist', function () {
           var _result;
           before(function (done) {
             BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-              .disposer(function (connection) {
-                connection.close();
-              }), function (connection) {
-                var db = connection.db('datakey');
-                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
-                return collection.insertManyAsync([{
-                  _id: 'jamie.wilson',
-                  name: 'jamie',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }, {
-                  _id: 'owen.evans',
-                  name: 'owen',
-                  _createdDate: new Date(),
-                  _updatedDate: new Date()
-                }]);
-              })
+                .disposer(function (connection) {
+                  connection.close();
+                }),
+                function (connection) {
+                  var db = connection.db('datakey');
+                  var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                  return collection.insertManyAsync([{
+                    _id: 'jamie.wilson',
+                    name: 'jamie',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }, {
+                    _id: 'owen.evans',
+                    name: 'owen',
+                    _createdDate: new Date(),
+                    _updatedDate: new Date()
+                  }]);
+                })
               .then(function () {
                 hoistContext.namespace.run(function () {
                   setContext().then(function () {
@@ -661,7 +678,8 @@ describe('integration', function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
               .disposer(function (connection) {
                 connection.close();
-              }), function (connection) {
+              }),
+              function (connection) {
                 var db = BBPromise.promisifyAll(connection.db('datakey'));
                 return db.dropDatabase();
               });

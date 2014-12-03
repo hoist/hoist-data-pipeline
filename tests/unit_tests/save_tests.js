@@ -22,7 +22,9 @@ describe('save', function () {
       this.collection = sinon.stub().returnsThis();
       this.db = sinon.stub().returnsThis();
       this.updateOne = sinon.stub().callsArg(3);
-      this.findOne = sinon.stub().callsArgWith(1,null,{saved:true});
+      this.findOne = sinon.stub().callsArgWith(1, null, {
+        saved: true
+      });
       this.close = sinon.stub();
     }
 
