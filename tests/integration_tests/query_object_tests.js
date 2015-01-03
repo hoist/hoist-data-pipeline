@@ -7,6 +7,7 @@ var Application = model.Application;
 var Bucket = model.Bucket;
 var Role = model.Role;
 var AppUser = model.AppUser;
+var mongoConnection = require('../../lib/mongo_connection');
 var MongoClient = BBPromise.promisifyAll(require('mongodb').MongoClient);
 var config = require('config');
 var expect = require('chai').expect;
@@ -27,6 +28,7 @@ describe('integration', function () {
   });
   after(function () {
     clock.restore();
+    return mongoConnection.close();
   });
   var pipeline = require('../../lib/pipeline')(hoistContext);
   var application = new Application({

@@ -8,10 +8,14 @@ var Application = require('hoist-model').Application;
 var AppUser = require('hoist-model').AppUser;
 var Bucket = require('hoist-model').Bucket;
 var Role = require('hoist-model').Role;
+var mongoConnection = require('../../lib/mongo_connection');
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
 describe('integration', function () {
+  after(function () {
+    return mongoConnection.close();
+  });
   describe('saving a hoist object', function () {
     describe('without a bucket', function () {
       var pipeline = require('../../lib/pipeline')(hoistContext);
