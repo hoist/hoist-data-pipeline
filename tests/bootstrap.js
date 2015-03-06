@@ -3,6 +3,7 @@ var chai = require('chai');
 chai.should();
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
+chai.use(require('chai-date'));
 var expect = chai.expect;
 process.env.NODE_ENV = 'test';
 var BBPromise = require('bluebird');

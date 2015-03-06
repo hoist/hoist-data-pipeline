@@ -1,6 +1,6 @@
 'use strict';
 var hoistContext = require('hoist-context');
-var sinon = require('sinon');
+
 var BBPromise = require('bluebird');
 var model = require('hoist-model');
 var Application = model.Application;
@@ -13,9 +13,9 @@ var config = require('config');
 var expect = require('chai').expect;
 
 describe('integration', function () {
-  var clock;
+
   before(function () {
-    clock = sinon.useFakeTimers(new Date().getTime());
+
     setContext = function () {
       return hoistContext.get().then(function (context) {
         context.bucket = bucket;
@@ -27,7 +27,7 @@ describe('integration', function () {
     };
   });
   after(function () {
-    clock.restore();
+
     return mongoConnection.close();
   });
   var pipeline = require('../../lib/pipeline')(hoistContext);
@@ -437,8 +437,8 @@ describe('integration', function () {
                   return collection.insertOneAsync({
                     _id: 'owen.evans',
                     name: 'owen',
-                    _createdDate: new Date(),
-                    _updatedDate: new Date()
+                    _createdDate: new Date(100000),
+                    _updatedDate: new Date(100000)
                   });
                 })
               .then(function () {
@@ -466,8 +466,8 @@ describe('integration', function () {
             expect(_result.length).to.eql(1);
             expect(_result).to.contain({
               name: 'owen',
-              _createdDate: new Date(),
-              _updatedDate: new Date(),
+              _createdDate: new Date(100000),
+              _updatedDate: new Date(100000),
               _id: 'owen.evans'
             });
           });
@@ -485,13 +485,13 @@ describe('integration', function () {
                   return collection.insertManyAsync([{
                     _id: 'jamie.wilson',
                     name: 'jamie',
-                    _createdDate: new Date(),
-                    _updatedDate: new Date()
+                    _createdDate: new Date(100000),
+                    _updatedDate: new Date(100000)
                   }, {
                     _id: 'owen.evans',
                     name: 'owen',
-                    _createdDate: new Date(),
-                    _updatedDate: new Date()
+                    _createdDate: new Date(100000),
+                    _updatedDate: new Date(100000)
                   }]);
                 })
               .then(function () {
@@ -522,13 +522,13 @@ describe('integration', function () {
             expect(_result).to.contain({
               _id: 'jamie.wilson',
               name: 'jamie',
-              _createdDate: new Date(),
-              _updatedDate: new Date()
+              _createdDate: new Date(100000),
+              _updatedDate: new Date(100000)
             }, {
               _id: 'owen.evans',
               name: 'owen',
-              _createdDate: new Date(),
-              _updatedDate: new Date()
+              _createdDate: new Date(100000),
+              _updatedDate: new Date(100000)
             });
           });
         });
@@ -606,8 +606,8 @@ describe('integration', function () {
                   return collection.insertOneAsync({
                     _id: 'owen.evans',
                     name: 'owen',
-                    _createdDate: new Date(),
-                    _updatedDate: new Date()
+                    _createdDate: new Date(100000),
+                    _updatedDate: new Date(100000)
                   });
                 })
               .then(function () {
@@ -635,8 +635,8 @@ describe('integration', function () {
             expect(_result.length).to.eql(1);
             expect(_result).to.contain({
               name: 'owen',
-              _createdDate: new Date(),
-              _updatedDate: new Date(),
+              _createdDate: new Date(100000),
+              _updatedDate: new Date(100000),
               _id: 'owen.evans'
             });
           });
@@ -654,13 +654,13 @@ describe('integration', function () {
                   return collection.insertManyAsync([{
                     _id: 'jamie.wilson',
                     name: 'jamie',
-                    _createdDate: new Date(),
-                    _updatedDate: new Date()
+                    _createdDate: new Date(100000),
+                    _updatedDate: new Date(100000)
                   }, {
                     _id: 'owen.evans',
                     name: 'owen',
-                    _createdDate: new Date(),
-                    _updatedDate: new Date()
+                    _createdDate: new Date(100000),
+                    _updatedDate: new Date(100000)
                   }]);
                 })
               .then(function () {
@@ -691,13 +691,13 @@ describe('integration', function () {
             expect(_result).to.contain({
               _id: 'jamie.wilson',
               name: 'jamie',
-              _createdDate: new Date(),
-              _updatedDate: new Date()
+              _createdDate: new Date(100000),
+              _updatedDate: new Date(100000)
             }, {
               _id: 'owen.evans',
               name: 'owen',
-              _createdDate: new Date(),
-              _updatedDate: new Date()
+              _createdDate: new Date(100000),
+              _updatedDate: new Date(100000)
             });
           });
         });
