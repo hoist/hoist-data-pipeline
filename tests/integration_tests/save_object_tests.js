@@ -19,10 +19,10 @@ describe('integration', function () {
   describe('saving a hoist object', function () {
     describe('without a bucket', function () {
       var pipeline = require('../../lib/pipeline')(hoistContext);
-      var clock;
+
       var _returnedObject;
       before(function (done) {
-        clock = sinon.useFakeTimers(new Date().getTime());
+
         var type = 'Person';
         var object = {
           _id: 'owen.evans',
@@ -81,7 +81,6 @@ describe('integration', function () {
       });
       var loadObject;
       after(function () {
-        clock.restore();
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
           .disposer(function (connection) {
             connection.close();
@@ -92,11 +91,9 @@ describe('integration', function () {
           });
       });
       it('returns the saved object', function () {
-        return expect(_returnedObject).to.eql({
-          _createdDate: new Date(),
+        return expect(_returnedObject).to.include({
           _id: "owen.evans",
           _type: "person",
-          _updatedDate: new Date(),
           name: "Owen",
           position: "CTO"
         });
@@ -128,20 +125,19 @@ describe('integration', function () {
       });
       it('sets created date', function () {
         return loadObject.then(function (obj) {
-          expect(obj._createdDate).to.eql(new Date());
+          return expect(obj._createdDate).to.be.today;
         });
       });
       it('sets updated date', function () {
         return loadObject.then(function (obj) {
-          expect(obj._updatedDate).to.eql(new Date());
+          return expect(obj._updatedDate).to.be.today;
         });
       });
     });
     describe('into a bucket', function () {
       var pipeline = require('../../lib/pipeline')();
-      var clock;
+
       before(function (done) {
-        clock = sinon.useFakeTimers(new Date().getTime());
         var type = 'Person';
         var object = {
           name: 'Owen',
@@ -205,7 +201,6 @@ describe('integration', function () {
       });
       var loadObject;
       after(function () {
-        clock.restore();
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
           .disposer(function (connection) {
             connection.close();
@@ -243,21 +238,20 @@ describe('integration', function () {
       });
       it('sets created date', function () {
         return loadObject.then(function (obj) {
-          expect(obj._createdDate).to.eql(new Date());
+          return expect(obj._createdDate).to.be.today;
         });
       });
       it('sets updated date', function () {
         return loadObject.then(function (obj) {
-          expect(obj._updatedDate).to.eql(new Date());
+          return expect(obj._updatedDate).to.be.today;
         });
       });
     });
     describe('with an array of objects', function () {
       var _returnedObjects;
       var pipeline = require('../../lib/pipeline')();
-      var clock;
+
       before(function (done) {
-        clock = sinon.useFakeTimers(new Date().getTime());
         var type = 'Person';
         var objects = [{
           _id: 'owen.evans',
@@ -325,7 +319,6 @@ describe('integration', function () {
       });
       var loadObject;
       after(function () {
-        clock.restore();
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
           .disposer(function (connection) {
             connection.close();
@@ -369,23 +362,22 @@ describe('integration', function () {
       });
       it('sets created date', function () {
         return loadObject.then(function (objs) {
-          expect(objs[0]._createdDate).to.eql(new Date());
-          expect(objs[1]._createdDate).to.eql(new Date());
+          return expect(objs[0]._createdDate).to.be.today &&
+            expect(objs[1]._createdDate).to.be.today;
         });
       });
       it('sets updated date', function () {
         return loadObject.then(function (objs) {
-          expect(objs[0]._updatedDate).to.eql(new Date());
-          expect(objs[1]._updatedDate).to.eql(new Date());
+          return expect(objs[0]._updatedDate).to.be.today &&
+            expect(objs[1]._updatedDate).to.be.today;
         });
       });
     });
     describe('without permission', function () {
       var pipeline = require('../../lib/pipeline')();
-      var clock;
+
       var error;
       before(function (done) {
-        clock = sinon.useFakeTimers(new Date().getTime());
         var type = 'Person';
         var objects = [{
           _id: 'owen.evans',
@@ -455,7 +447,6 @@ describe('integration', function () {
       });
       var loadObject;
       after(function () {
-        clock.restore();
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
           .disposer(function (connection) {
             connection.close();
@@ -476,10 +467,9 @@ describe('integration', function () {
     });
     describe('with an existing object', function () {
       var pipeline = require('../../lib/pipeline')();
-      var clock;
+
       var startDate;
       before(function (done) {
-        clock = sinon.useFakeTimers(new Date().getTime());
         var type = 'Person';
         var objects = [{
           _id: 'owen.evans',
@@ -491,6 +481,7 @@ describe('integration', function () {
           position: 'Developer'
         }];
         startDate = new Date();
+        startDate.setDate(startDate.getDate() - 1);
         BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
             .disposer(function (connection) {
               connection.close();
@@ -501,12 +492,11 @@ describe('integration', function () {
               return collection.insertOneAsync({
                 _id: 'owen.evans',
                 name: 'oldName',
-                _createdDate: new Date(),
-                _updatedDate: new Date()
+                _createdDate: startDate,
+                _updatedDate: startDate
               });
             })
           .then(function () {
-            clock.tick(100000);
             hoistContext.namespace.run(function () {
               return hoistContext.get().then(function (context) {
                   var application = new Application({
@@ -564,7 +554,6 @@ describe('integration', function () {
       });
       var loadObject;
       after(function () {
-        clock.restore();
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
           .disposer(function (connection) {
             connection.close();
@@ -605,14 +594,14 @@ describe('integration', function () {
       });
       it('sets created date', function () {
         return loadObject.then(function (objs) {
-          expect(objs[0]._createdDate).to.eql(startDate);
-          expect(objs[1]._createdDate).to.eql(new Date());
+          return expect(objs[0]._createdDate).to.be.yesterday &&
+            expect(objs[1]._createdDate).to.be.today;
         });
       });
       it('sets updated date', function () {
         return loadObject.then(function (objs) {
-          expect(objs[0]._updatedDate).to.eql(new Date());
-          expect(objs[1]._updatedDate).to.eql(new Date());
+          return expect(objs[0]._updatedDate).to.be.today &&
+            expect(objs[1]._updatedDate).to.be.today;
         });
       });
     });
