@@ -16,7 +16,12 @@
     "url": "https://github.com/hoist/hoist-data-pipeline/issues"
   },
   "homepage": "https://github.com/hoist/hoist-data-pipeline",
+  "peerDependencies": {
+    "@hoist/context": "^1.0.1",
+    "@hoist/model": "^1.0.2"
+  },
   "devDependencies": {
+    "@hoist/context": "^1.0.2",
     "chai": "^1.9.1",
     "chai-as-promised": "^4.1.1",
     "chai-date": "^1.0.0",
@@ -25,8 +30,6 @@
     "gulp-istanbul-enforcer": "^1.0.3",
     "gulp-jshint": "^1.8.4",
     "gulp-mocha": "^1.1.0",
-    "hoist-context": "git://github.com/hoist/hoist-context",
-    "hoist-model": "git://github.com/hoist/hoist-model",
     "jshint-growl-reporter": "^0.1.1",
     "jshint-stylish": "^1.0.0",
     "run-sequence": "^0.3.7",
@@ -34,10 +37,10 @@
     "sinon-chai": "^2.5.0"
   },
   "dependencies": {
+    "@hoist/errors": "^1.0.1",
+    "@hoist/logger": "^1.0.0",
     "bluebird": "^2.3.10",
     "config": "^1.6.0",
-    "hoist-errors": "git://github.com/hoist/hoist-errors",
-    "hoist-logger": "git://github.com/hoist/hoist-logger",
     "lodash": "^2.4.1",
     "mongodb": "^2.0.0",
     "pluralize": "^1.0.3",

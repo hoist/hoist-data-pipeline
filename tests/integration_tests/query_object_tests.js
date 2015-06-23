@@ -1,8 +1,8 @@
 'use strict';
-var hoistContext = require('hoist-context');
+var hoistContext = require('@hoist/context');
 
 var BBPromise = require('bluebird');
-var model = require('hoist-model');
+var model = require('@hoist/model');
 var Application = model.Application;
 var Bucket = model.Bucket;
 var Role = model.Role;
@@ -109,16 +109,16 @@ describe('integration', function () {
                   });
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.findOne('person', {
-                      _id: 'owen.evans'
-                    }).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+
+                setContext().then(function () {
+                  pipeline.findOne('person', {
+                    _id: 'owen.evans'
+                  }).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -158,15 +158,15 @@ describe('integration', function () {
                   }]);
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.findOne('person', {
 
-                    }).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+                setContext().then(function () {
+                  pipeline.findOne('person', {
+
+                  }).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
+
                 });
               });
           });
@@ -188,15 +188,15 @@ describe('integration', function () {
           var _result;
           before(function (done) {
 
-            hoistContext.namespace.run(function () {
-              setContext().then(function () {
-                pipeline.findOne('person', {
 
-                }).nodeify(function (err, result) {
-                  _result = result;
-                  done(err);
-                });
+            setContext().then(function () {
+              pipeline.findOne('person', {
+
+              }).nodeify(function (err, result) {
+                _result = result;
+                done(err);
               });
+
             });
           });
           after(function () {
@@ -221,15 +221,15 @@ describe('integration', function () {
             bucket: bucket._id,
             role: globalReader._id
           }];
-          hoistContext.namespace.run(function () {
-            setContext().then(function () {
-              pipeline.findOne('person', {
 
-              }).nodeify(function (err) {
-                error = err;
-                done();
-              });
+          setContext().then(function () {
+            pipeline.findOne('person', {
+
+            }).nodeify(function (err) {
+              error = err;
+              done();
             });
+
           });
         });
         after(function () {
@@ -279,16 +279,16 @@ describe('integration', function () {
                   });
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.findOne('person', {
-                      _id: 'owen.evans'
-                    }).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+
+                setContext().then(function () {
+                  pipeline.findOne('person', {
+                    _id: 'owen.evans'
+                  }).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -328,16 +328,16 @@ describe('integration', function () {
                   }]);
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.findOne('person', {
 
-                    }).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+                setContext().then(function () {
+                  pipeline.findOne('person', {
+
+                  }).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -358,16 +358,16 @@ describe('integration', function () {
           var _result;
           before(function (done) {
 
-            hoistContext.namespace.run(function () {
-              setContext().then(function () {
-                pipeline.findOne('person', {
 
-                }).nodeify(function (err, result) {
-                  _result = result;
-                  done(err);
-                });
+            setContext().then(function () {
+              pipeline.findOne('person', {
+
+              }).nodeify(function (err, result) {
+                _result = result;
+                done(err);
               });
             });
+
           });
           after(function () {
             return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
@@ -391,16 +391,16 @@ describe('integration', function () {
             bucket: bucket._id,
             role: reader._id
           }];
-          hoistContext.namespace.run(function () {
-            setContext().then(function () {
-              pipeline.findOne('person', {
 
-              }).nodeify(function (err) {
-                error = err;
-                done();
-              });
+          setContext().then(function () {
+            pipeline.findOne('person', {
+
+            }).nodeify(function (err) {
+              error = err;
+              done();
             });
           });
+
         });
         after(function () {
           user.roles = {};
@@ -442,14 +442,14 @@ describe('integration', function () {
                   });
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.find('person', {}).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+
+                setContext().then(function () {
+                  pipeline.find('person', {}).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -495,16 +495,16 @@ describe('integration', function () {
                   }]);
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.find('person', {
 
-                    }).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+                setContext().then(function () {
+                  pipeline.find('person', {
+
+                  }).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -535,16 +535,16 @@ describe('integration', function () {
         describe('when no object exists', function () {
           var _result;
           before(function (done) {
-            hoistContext.namespace.run(function () {
-              setContext().then(function () {
-                pipeline.find('person', {
 
-                }).nodeify(function (err, result) {
-                  _result = result;
-                  done(err);
-                });
+            setContext().then(function () {
+              pipeline.find('person', {
+
+              }).nodeify(function (err, result) {
+                _result = result;
+                done(err);
               });
             });
+
           });
           it('returns empty array', function () {
             expect(_result).to.eql([]);
@@ -555,14 +555,14 @@ describe('integration', function () {
         var error;
         before(function (done) {
           user.roles.mainRole = globalReader._id;
-          hoistContext.namespace.run(function () {
-            setContext().then(function () {
-              pipeline.find('person', {}).nodeify(function (err) {
-                error = err;
-                done();
-              });
+
+          setContext().then(function () {
+            pipeline.find('person', {}).nodeify(function (err) {
+              error = err;
+              done();
             });
           });
+
         });
         after(function () {
           user.roles = {};
@@ -611,14 +611,14 @@ describe('integration', function () {
                   });
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.find('person', {}).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+
+                setContext().then(function () {
+                  pipeline.find('person', {}).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -664,16 +664,16 @@ describe('integration', function () {
                   }]);
                 })
               .then(function () {
-                hoistContext.namespace.run(function () {
-                  setContext().then(function () {
-                    pipeline.find('person', {
 
-                    }).nodeify(function (err, result) {
-                      _result = result;
-                      done(err);
-                    });
+                setContext().then(function () {
+                  pipeline.find('person', {
+
+                  }).nodeify(function (err, result) {
+                    _result = result;
+                    done(err);
                   });
                 });
+
               });
           });
           after(function () {
@@ -704,16 +704,16 @@ describe('integration', function () {
         describe('when no object exists', function () {
           var _result;
           before(function (done) {
-            hoistContext.namespace.run(function () {
-              setContext().then(function () {
-                pipeline.find('person', {
 
-                }).nodeify(function (err, result) {
-                  _result = result;
-                  done(err);
-                });
+            setContext().then(function () {
+              pipeline.find('person', {
+
+              }).nodeify(function (err, result) {
+                _result = result;
+                done(err);
               });
             });
+
           });
           it('returns empty array', function () {
             expect(_result).to.eql([]);
@@ -724,16 +724,16 @@ describe('integration', function () {
         var error;
         before(function (done) {
           user.roles.mainRole = reader._id;
-          hoistContext.namespace.run(function () {
-            setContext().then(function () {
-              pipeline.find('person', {
 
-              }).nodeify(function (err) {
-                error = err;
-                done();
-              });
+          setContext().then(function () {
+            pipeline.find('person', {
+
+            }).nodeify(function (err) {
+              error = err;
+              done();
             });
           });
+
         });
         after(function () {
           user.roles = {};

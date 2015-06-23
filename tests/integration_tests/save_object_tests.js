@@ -3,15 +3,14 @@ require('../bootstrap');
 var BBPromise = require('bluebird');
 var MongoClient = BBPromise.promisifyAll(require('mongodb').MongoClient);
 var config = require('config');
-var hoistContext = require('hoist-context');
-var Application = require('hoist-model').Application;
-var AppUser = require('hoist-model').AppUser;
-var Bucket = require('hoist-model').Bucket;
-var Role = require('hoist-model').Role;
+var hoistContext = require('@hoist/context');
+var Application = require('@hoist/model').Application;
+var AppUser = require('@hoist/model').AppUser;
+var Bucket = require('@hoist/model').Bucket;
+var Role = require('@hoist/model').Role;
 var mongoConnection = require('../../lib/mongo_connection');
 
 var expect = require('chai').expect;
-var sinon = require('sinon');
 describe('integration', function () {
   after(function () {
     return mongoConnection.close();
@@ -29,58 +28,59 @@ describe('integration', function () {
           name: 'Owen',
           position: 'CTO'
         };
-        hoistContext.namespace.run(function () {
-          return hoistContext.get().then(function (context) {
-              var application = new Application({
-                _id: 'applicationid',
-                dataKey: 'datakey',
-                anonymousPermissions: {
-                  live: []
-                }
-              });
-              var role = new Role({
-                _id: 'roleid',
-                application: application._id,
-                environment: 'live',
-                claims: ['DataGlobalWrite']
-              });
-              context.user = new AppUser({
-                _id: 'memberid',
-                application: 'application',
-                environment: 'live',
-                emailAddresses: [{
-                  address: 'owen@hoist.io',
-                  verified: true
-                }],
-                roles: {
-                  mainRole: role._id,
-                  bucketRoles: []
-                }
-              });
-              context.bucket = null;
-              context.roles = [role];
-              context.application = application;
-            })
-            .then(function () {
-              return pipeline.save(type, object);
-            }).then(function (returnedObject) {
-              _returnedObject = returnedObject;
-              loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-                .disposer(function (connection) {
-                  connection.close();
-                }),
-                function (connection) {
-                  var db = connection.db('datakey');
-                  var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
-                  return collection.findOneAsync({}).then(function (obj) {
-                    return obj;
-                  });
+
+        return hoistContext.get().then(function (context) {
+            var application = new Application({
+              _id: 'applicationid',
+              dataKey: 'datakey',
+              anonymousPermissions: {
+                live: []
+              }
+            });
+            var role = new Role({
+              _id: 'roleid',
+              application: application._id,
+              environment: 'live',
+              claims: ['DataGlobalWrite']
+            });
+            context.user = new AppUser({
+              _id: 'memberid',
+              application: 'application',
+              environment: 'live',
+              emailAddresses: [{
+                address: 'owen@hoist.io',
+                verified: true
+              }],
+              roles: {
+                mainRole: role._id,
+                bucketRoles: []
+              }
+            });
+            context.bucket = null;
+            context.roles = [role];
+            context.application = application;
+          })
+          .then(function () {
+            return pipeline.save(type, object);
+          }).then(function (returnedObject) {
+            _returnedObject = returnedObject;
+            loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }),
+              function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:global:people'));
+                return collection.findOneAsync({}).then(function (obj) {
+                  return obj;
                 });
-            }).nodeify(done);
-        });
+              });
+          }).nodeify(done);
+
       });
       var loadObject;
       after(function () {
+        hoistContext.set(undefined);
         return BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
           .disposer(function (connection) {
             connection.close();
@@ -143,61 +143,61 @@ describe('integration', function () {
           name: 'Owen',
           position: 'CTO'
         };
-        hoistContext.namespace.run(function () {
-          return hoistContext.get().then(function (context) {
-              var application = new Application({
-                _id: 'applicationid',
-                dataKey: 'datakey',
-                anonymousPermissions: {
-                  live: []
-                }
-              });
-              context.bucket = new Bucket({
-                _id: 'bucketid',
-                application: application._id,
-                environment: 'live'
-              });
-              var role = new Role({
-                _id: 'roleid',
-                application: application._id,
-                environment: 'live',
-                claims: ['DataWrite']
-              });
-              context.user = new AppUser({
-                _id: 'memberid',
-                application: 'application',
-                environment: 'live',
-                emailAddresses: [{
-                  address: 'owen@hoist.io',
-                  verified: true
-                }],
-                roles: {
-                  bucketRoles: [{
-                    bucket: context.bucket._id,
-                    role: role._id
-                  }]
-                }
-              });
 
-              context.roles = [role];
-              context.application = application;
-            })
-            .then(function () {
-              return pipeline.save(type, object);
-            }).then(function () {
-              loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-                .disposer(function (connection) {
-                  connection.close();
-                }),
-                function (connection) {
-                  var db = connection.db('datakey');
-                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                  return collection.findOneAsync({}).then(function (obj) {
-                    return obj;
-                  });
+        return hoistContext.get().then(function (context) {
+            var application = new Application({
+              _id: 'applicationid',
+              dataKey: 'datakey',
+              anonymousPermissions: {
+                live: []
+              }
+            });
+            context.bucket = new Bucket({
+              _id: 'bucketid',
+              application: application._id,
+              environment: 'live'
+            });
+            var role = new Role({
+              _id: 'roleid',
+              application: application._id,
+              environment: 'live',
+              claims: ['DataWrite']
+            });
+            context.user = new AppUser({
+              _id: 'memberid',
+              application: 'application',
+              environment: 'live',
+              emailAddresses: [{
+                address: 'owen@hoist.io',
+                verified: true
+              }],
+              roles: {
+                bucketRoles: [{
+                  bucket: context.bucket._id,
+                  role: role._id
+                }]
+              }
+            });
+
+            context.roles = [role];
+            context.application = application;
+          })
+          .then(function () {
+            return pipeline.save(type, object);
+          }).then(function () {
+            loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }),
+              function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                return collection.findOneAsync({}).then(function (obj) {
+                  return obj;
                 });
-            }).nodeify(done);
-        });
+              });
+          }).nodeify(done);
+
       });
       var loadObject;
       after(function () {
@@ -262,60 +262,60 @@ describe('integration', function () {
           name: 'Amelia',
           position: 'Developer'
         }];
-        hoistContext.namespace.run(function () {
-          return hoistContext.get().then(function (context) {
-              var application = new Application({
-                _id: 'applicationid',
-                dataKey: 'datakey',
-                anonymousPermissions: {
-                  live: []
-                }
-              });
-              context.bucket = new Bucket({
-                _id: 'bucketid',
-                application: application._id,
-                environment: 'live'
-              });
-              var role = new Role({
-                _id: 'roleid',
-                application: application._id,
-                environment: 'live',
-                claims: ['DataWrite']
-              });
-              context.user = new AppUser({
-                _id: 'memberid',
-                application: 'application',
-                environment: 'live',
-                emailAddresses: [{
-                  address: 'owen@hoist.io',
-                  verified: true
-                }],
-                roles: {
-                  bucketRoles: [{
-                    bucket: context.bucket._id,
-                    role: role._id
-                  }]
-                }
-              });
 
-              context.roles = [role];
-              context.application = application;
-            })
-            .then(function () {
-              return pipeline.save(type, objects);
-            }).then(function (saved) {
-              _returnedObjects = saved;
-              loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-                .disposer(function (connection) {
-                  connection.close();
-                }),
-                function (connection) {
-                  var db = connection.db('datakey');
-                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                  return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
-                });
-            }).nodeify(done);
-        });
+        return hoistContext.get().then(function (context) {
+            var application = new Application({
+              _id: 'applicationid',
+              dataKey: 'datakey',
+              anonymousPermissions: {
+                live: []
+              }
+            });
+            context.bucket = new Bucket({
+              _id: 'bucketid',
+              application: application._id,
+              environment: 'live'
+            });
+            var role = new Role({
+              _id: 'roleid',
+              application: application._id,
+              environment: 'live',
+              claims: ['DataWrite']
+            });
+            context.user = new AppUser({
+              _id: 'memberid',
+              application: 'application',
+              environment: 'live',
+              emailAddresses: [{
+                address: 'owen@hoist.io',
+                verified: true
+              }],
+              roles: {
+                bucketRoles: [{
+                  bucket: context.bucket._id,
+                  role: role._id
+                }]
+              }
+            });
+
+            context.roles = [role];
+            context.application = application;
+          })
+          .then(function () {
+            return pipeline.save(type, objects);
+          }).then(function (saved) {
+            _returnedObjects = saved;
+            loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }),
+              function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
+              });
+          }).nodeify(done);
+
       });
       var loadObject;
       after(function () {
@@ -388,62 +388,62 @@ describe('integration', function () {
           name: 'Amelia',
           position: 'Developer'
         }];
-        hoistContext.namespace.run(function () {
-          return hoistContext.get().then(function (context) {
-              var application = new Application({
-                _id: 'applicationid',
-                dataKey: 'datakey',
-                anonymousPermissions: {
-                  live: []
-                }
-              });
-              context.bucket = new Bucket({
-                _id: 'bucketid',
-                application: application._id,
-                environment: 'live'
-              });
-              var role = new Role({
-                _id: 'roleid',
-                application: application._id,
-                environment: 'live',
-                claims: ['DataRead']
-              });
-              context.user = new AppUser({
-                _id: 'memberid',
-                application: 'application',
-                environment: 'live',
-                emailAddresses: [{
-                  address: 'owen@hoist.io',
-                  verified: true
-                }],
-                roles: {
-                  bucketRoles: [{
-                    bucket: context.bucket._id,
-                    role: role._id
-                  }]
-                }
-              });
 
-              context.roles = [role];
-              context.application = application;
-            })
-            .then(function () {
-              return pipeline.save(type, objects);
-            }).finally(function () {
-              loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-                .disposer(function (connection) {
-                  connection.close();
-                }),
-                function (connection) {
-                  var db = connection.db('datakey');
-                  var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                  return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
-                });
-            }).nodeify(function (err) {
-              error = err;
-              done();
+        return hoistContext.get().then(function (context) {
+            var application = new Application({
+              _id: 'applicationid',
+              dataKey: 'datakey',
+              anonymousPermissions: {
+                live: []
+              }
             });
-        });
+            context.bucket = new Bucket({
+              _id: 'bucketid',
+              application: application._id,
+              environment: 'live'
+            });
+            var role = new Role({
+              _id: 'roleid',
+              application: application._id,
+              environment: 'live',
+              claims: ['DataRead']
+            });
+            context.user = new AppUser({
+              _id: 'memberid',
+              application: 'application',
+              environment: 'live',
+              emailAddresses: [{
+                address: 'owen@hoist.io',
+                verified: true
+              }],
+              roles: {
+                bucketRoles: [{
+                  bucket: context.bucket._id,
+                  role: role._id
+                }]
+              }
+            });
+
+            context.roles = [role];
+            context.application = application;
+          })
+          .then(function () {
+            return pipeline.save(type, objects);
+          }).finally(function () {
+            loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+              .disposer(function (connection) {
+                connection.close();
+              }),
+              function (connection) {
+                var db = connection.db('datakey');
+                var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
+              });
+          }).nodeify(function (err) {
+            error = err;
+            done();
+          });
+
       });
       var loadObject;
       after(function () {
@@ -497,59 +497,59 @@ describe('integration', function () {
               });
             })
           .then(function () {
-            hoistContext.namespace.run(function () {
-              return hoistContext.get().then(function (context) {
-                  var application = new Application({
-                    _id: 'applicationid',
-                    dataKey: 'datakey',
-                    anonymousPermissions: {
-                      live: []
-                    }
-                  });
-                  context.bucket = new Bucket({
-                    _id: 'bucketid',
-                    application: application._id,
-                    environment: 'live'
-                  });
-                  var role = new Role({
-                    _id: 'roleid',
-                    application: application._id,
-                    environment: 'live',
-                    claims: ['DataWrite']
-                  });
-                  context.user = new AppUser({
-                    _id: 'memberid',
-                    application: 'application',
-                    environment: 'live',
-                    emailAddresses: [{
-                      address: 'owen@hoist.io',
-                      verified: true
-                    }],
-                    roles: {
-                      bucketRoles: [{
-                        bucket: context.bucket._id,
-                        role: role._id
-                      }]
-                    }
-                  });
 
-                  context.roles = [role];
-                  context.application = application;
-                })
-                .then(function () {
-                  return pipeline.save(type, objects);
-                }).then(function () {
-                  loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
-                    .disposer(function (connection) {
-                      connection.close();
-                    }),
-                    function (connection) {
-                      var db = connection.db('datakey');
-                      var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
-                      return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
-                    });
-                }).nodeify(done);
-            });
+            return hoistContext.get().then(function (context) {
+                var application = new Application({
+                  _id: 'applicationid',
+                  dataKey: 'datakey',
+                  anonymousPermissions: {
+                    live: []
+                  }
+                });
+                context.bucket = new Bucket({
+                  _id: 'bucketid',
+                  application: application._id,
+                  environment: 'live'
+                });
+                var role = new Role({
+                  _id: 'roleid',
+                  application: application._id,
+                  environment: 'live',
+                  claims: ['DataWrite']
+                });
+                context.user = new AppUser({
+                  _id: 'memberid',
+                  application: 'application',
+                  environment: 'live',
+                  emailAddresses: [{
+                    address: 'owen@hoist.io',
+                    verified: true
+                  }],
+                  roles: {
+                    bucketRoles: [{
+                      bucket: context.bucket._id,
+                      role: role._id
+                    }]
+                  }
+                });
+
+                context.roles = [role];
+                context.application = application;
+              })
+              .then(function () {
+                return pipeline.save(type, objects);
+              }).then(function () {
+                loadObject = BBPromise.using(MongoClient.connectAsync(config.get('Hoist.mongo.db'))
+                  .disposer(function (connection) {
+                    connection.close();
+                  }),
+                  function (connection) {
+                    var db = connection.db('datakey');
+                    var collection = BBPromise.promisifyAll(db.collection('live:bucketid:people'));
+                    return BBPromise.promisifyAll(collection.find({})).toArrayAsync();
+                  });
+              }).nodeify(done);
+
           });
       });
       var loadObject;

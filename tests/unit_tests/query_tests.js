@@ -1,7 +1,7 @@
 'use strict';
 require('../bootstrap');
 var sinon = require('sinon');
-var Context = require('hoist-context');
+var Context = require('@hoist/context');
 var mongoConnection = require('../../lib/mongo_connection');
 var BBPromise = require('bluebird');
 var expect = require('chai').expect;
