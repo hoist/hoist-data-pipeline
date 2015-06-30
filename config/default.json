@@ -1,7 +1,10 @@
 {
   "Hoist": {
     "mongo": {
-      "db": "mongodb://localhost/hoist-default"
+      "applications": "mongodb://db/hoist-default",
+      "core": {
+        "connectionString": "mongodb://db/hoist-test"
+      }
     },
     "data": {
       "checkAuth": false

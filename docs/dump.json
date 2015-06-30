@@ -1,0 +1,1988 @@
+[
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/helpers.js",
+    "memberof": null,
+    "longname": "src/helpers.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "'use strict';\nimport pluralize from 'pluralize';\nimport shortid from 'shortid';\n\n/**\n * given a type and context resolve the collection name\n * @param {string} type - this instance type\n * @param {object} context - the current context\n * @returns {string} the collection name to use\n */\nexport function getCollectionName(type, context) {\n  var bucketId = 'global';\n  if (context.bucket) {\n    bucketId = context.bucket._id;\n  }\n  return context.environment + \":\" + bucketId + \":\" + pluralize(type).toLowerCase();\n}\n\n\nfunction ensureId(json) {\n  if (!json._id) {\n    json._id = shortid();\n  }\n  return json;\n}\n\nfunction ensureType(type, json) {\n  json._type = type.toLowerCase();\n  return json;\n}\n\n/**\n * adds any required fields to the instance\n * @param {string} type - the type of the instance\n * @param {object} instance - the instance to transform\n * @returns {object} the transformed instance\n */\nexport function requiredFieldsTransformer(type, instance) {\n  return ensureId(ensureType(type, instance));\n}\n\n/**\n * adds timestamps to an instance\n * @param {object} instance - the instance to transform\n * @returns {object} the transformed instance\n */\n\nexport function timestampsTransformer(instance) {\n  instance._createdDate = new Date();\n  instance._updatedDate = new Date();\n  return instance;\n}\n"
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "getCollectionName",
+    "memberof": "src/helpers.js",
+    "longname": "src/helpers.js~getCollectionName",
+    "access": null,
+    "export": true,
+    "importPath": "@hoist/data-pipeline/src/helpers.js",
+    "importStyle": "{getCollectionName}",
+    "description": "given a type and context resolve the collection name",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{string} the collection name to use"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "type",
+        "description": "this instance type"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "context",
+        "description": "the current context"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": "the collection name to use"
+    },
+    "generator": false
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "ensureId",
+    "memberof": "src/helpers.js",
+    "longname": "src/helpers.js~ensureId",
+    "access": null,
+    "export": false,
+    "importPath": "@hoist/data-pipeline/src/helpers.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 20,
+    "undocument": true,
+    "params": [
+      {
+        "name": "json",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "ensureType",
+    "memberof": "src/helpers.js",
+    "longname": "src/helpers.js~ensureType",
+    "access": null,
+    "export": false,
+    "importPath": "@hoist/data-pipeline/src/helpers.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "params": [
+      {
+        "name": "type",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "json",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "requiredFieldsTransformer",
+    "memberof": "src/helpers.js",
+    "longname": "src/helpers.js~requiredFieldsTransformer",
+    "access": null,
+    "export": true,
+    "importPath": "@hoist/data-pipeline/src/helpers.js",
+    "importStyle": "{requiredFieldsTransformer}",
+    "description": "adds any required fields to the instance",
+    "lineNumber": 38,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{object} the transformed instance"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "type",
+        "description": "the type of the instance"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "instance",
+        "description": "the instance to transform"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "object"
+      ],
+      "spread": false,
+      "description": "the transformed instance"
+    },
+    "generator": false
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "timestampsTransformer",
+    "memberof": "src/helpers.js",
+    "longname": "src/helpers.js~timestampsTransformer",
+    "access": null,
+    "export": true,
+    "importPath": "@hoist/data-pipeline/src/helpers.js",
+    "importStyle": "{timestampsTransformer}",
+    "description": "adds timestamps to an instance",
+    "lineNumber": 48,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{object} the transformed instance"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "instance",
+        "description": "the instance to transform"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "object"
+      ],
+      "spread": false,
+      "description": "the transformed instance"
+    },
+    "generator": false
+  },
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/mongo_connection.js",
+    "memberof": null,
+    "longname": "src/mongo_connection.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "'use strict';\nvar BBPromise = require('bluebird');\nvar mongodb = require('mongodb');\nvar config = require('config');\nvar logger = require('@hoist/logger');\nBBPromise.promisifyAll(mongodb.MongoClient);\n/**\n * marshalling class for connection to mongodb\n */\nclass MongoConnection {\n  /**\n   * create a new instance\n   */\n  constructor() {\n    this._mongoClient = mongodb.MongoClient;\n    this._logger = logger.child({\n      cls: this.constructor.name\n    });\n  }\n\n\n  _clearTimeout() {\n    if (this._connectionTimeout) {\n      this._logger.info('clearing timeout');\n      clearTimeout(this._connectionTimeout);\n    }\n  }\n  _resetTimeout() {\n    if (this._connectionTimeout) {\n      this._logger.info('clearing timeout');\n      clearTimeout(this._connectionTimeout);\n    }\n    this._connectionTimeout = setTimeout(() => {\n      this._connection.closeAsync();\n      delete this._connection;\n    }, 2000);\n  }\n  _openConnection() {\n    this._clearTimeout();\n    return this._mongoClient\n      .connectAsync(config.get('Hoist.mongo.applications'))\n      .then((connection) => {\n        //close connection after 2 seconds of inactivity\n        this._resetTimeout();\n        this._logger.info('connection opened');\n        this._connection = connection;\n        return connection;\n      });\n  };\n\n  /**\n   * close any open connection to mongo\n   * @returns {Promise}\n   */\n  close() {\n    if (!this._connection) {\n      return Promise.resolve();\n    }\n    this._clearTimeout();\n    let connection = this._connection;\n    delete this._connection;\n    return connection.closeAsync();\n  }\n\n  /**\n   * Attempt to reuse mongo connection or open one if it doesn't exist\n   * @returns {Promise}\n   */\n  open() {\n    if (this._connection) {\n      this._resetTimeout();\n      return Promise.resolve(this._connection);\n    } else {\n      return this._openConnection();\n    }\n\n  };\n}\n\nexport default MongoConnection;\n"
+  },
+  {
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "BBPromise",
+    "memberof": "src/mongo_connection.js",
+    "longname": "src/mongo_connection.js~BBPromise",
+    "access": null,
+    "export": false,
+    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "mongodb",
+    "memberof": "src/mongo_connection.js",
+    "longname": "src/mongo_connection.js~mongodb",
+    "access": null,
+    "export": false,
+    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "config",
+    "memberof": "src/mongo_connection.js",
+    "longname": "src/mongo_connection.js~config",
+    "access": null,
+    "export": false,
+    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "logger",
+    "memberof": "src/mongo_connection.js",
+    "longname": "src/mongo_connection.js~logger",
+    "access": null,
+    "export": false,
+    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "MongoConnection",
+    "memberof": "src/mongo_connection.js",
+    "longname": "src/mongo_connection.js~MongoConnection",
+    "access": null,
+    "export": true,
+    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
+    "importStyle": "MongoConnection",
+    "description": "marshalling class for connection to mongodb",
+    "lineNumber": 10,
+    "interface": false
+  },
+  {
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#constructor",
+    "access": null,
+    "description": "create a new instance",
+    "lineNumber": 14,
+    "params": [],
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_mongoClient",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_mongoClient",
+    "access": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_logger",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_logger",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_clearTimeout",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_clearTimeout",
+    "access": null,
+    "description": null,
+    "lineNumber": 22,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_resetTimeout",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_resetTimeout",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_connectionTimeout",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_connectionTimeout",
+    "access": null,
+    "description": null,
+    "lineNumber": 33,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_openConnection",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_openConnection",
+    "access": null,
+    "description": null,
+    "lineNumber": 38,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_connection",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#_connection",
+    "access": null,
+    "description": null,
+    "lineNumber": 46,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "close",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#close",
+    "access": null,
+    "description": "close any open connection to mongo",
+    "lineNumber": 55,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "open",
+    "memberof": "src/mongo_connection.js~MongoConnection",
+    "longname": "src/mongo_connection.js~MongoConnection#open",
+    "access": null,
+    "description": "Attempt to reuse mongo connection or open one if it doesn't exist",
+    "lineNumber": 69,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/pipeline.js",
+    "memberof": null,
+    "longname": "src/pipeline.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "'use strict';\nimport util from 'util';\nimport MongoConnection from './mongo_connection';\nimport Context from '@hoist/context';\nimport {\n  requiredFieldsTransformer,\n  timestampsTransformer,\n  getCollectionName\n}\nfrom './helpers';\nimport Bluebird from 'bluebird';\n/**\n * application data api pipeline\n */\nclass DataPipeline {\n  /**\n   * create a new pipeline\n   */\n  constructor() {\n    this._connection = new MongoConnection();\n  }\n\n  /**\n   * save an object or set of objects as a type\n   * @param {string} type - the object types\n   * @param {object|Array<object>} objOrArray - the object(s) to save\n   * @returns {Promise}\n   */\n  save(type, objOrArray) {\n    var arrayObj = [].concat(objOrArray);\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        return Promise.all(arrayObj.map((obj) => {\n          return Promise.resolve(requiredFieldsTransformer(type, obj))\n            .then((data) => {\n              return timestampsTransformer(data);\n            }).then((data) => {\n              var db = connection.db(context.application.dataKey);\n              var collection = Bluebird.promisifyAll(db.collection(getCollectionName(data._type, context)));\n              var createdDate = new Date();\n              if (data._createdDate) {\n                createdDate = data._createdDate;\n                delete data._createdDate;\n              }\n              var id = data._id;\n              delete data._id;\n              return collection.updateOneAsync({\n                _id: id\n              }, {\n                $set: data,\n                $setOnInsert: {\n                  _createdDate: createdDate\n                }\n              }, {\n                upsert: true\n              }).then(function () {\n                return collection.findOneAsync({\n                  _id: id\n                });\n              });\n            });\n\n        }));\n      });\n    }).then((savedData) => {\n      if (!util.isArray(objOrArray)) {\n        if (savedData.length < 2) {\n          if (savedData.length < 1) {\n            return null;\n          } else {\n            return savedData[0];\n          }\n        }\n      }\n      return savedData;\n    });\n  }\n\n  /**\n   * finds all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  find(type, query) {\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        //throw new Error();\n        var db = connection.db(context.application.dataKey);\n        var collection = db.collection(getCollectionName(type, context));\n        return Bluebird.promisifyAll(collection.find(query)).toArrayAsync()\n          .then(function (results) {\n            return Promise.resolve(results);\n          });\n      });\n    });\n  }\n\n  /**\n   * finds a single object of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  findOne(type, query) {\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.findOneAsync(query)\n          .then(function (results) {\n            return results;\n          });\n      });\n    });\n  }\n\n  /**\n   * removes all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  remove(type, query) {\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.removeAsync(query)\n          .then(function (results) {\n            return results;\n          });\n      });\n    });\n  }\n}\n\nexport default DataPipeline;\n"
+  },
+  {
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "DataPipeline",
+    "memberof": "src/pipeline.js",
+    "longname": "src/pipeline.js~DataPipeline",
+    "access": null,
+    "export": true,
+    "importPath": "@hoist/data-pipeline/src/pipeline.js",
+    "importStyle": "DataPipeline",
+    "description": "application data api pipeline",
+    "lineNumber": 15,
+    "interface": false
+  },
+  {
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#constructor",
+    "access": null,
+    "description": "create a new pipeline",
+    "lineNumber": 19,
+    "params": [],
+    "generator": false
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_connection",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#_connection",
+    "access": null,
+    "description": null,
+    "lineNumber": 20,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "save",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#save",
+    "access": null,
+    "description": "save an object or set of objects as a type",
+    "lineNumber": 29,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "type",
+        "description": "the object types"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object|Array<object>"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "objOrArray",
+        "description": "the object(s) to save"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "find",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#find",
+    "access": null,
+    "description": "finds all objects of type matching the given query",
+    "lineNumber": 85,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "type",
+        "description": "the object types"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "query",
+        "description": "a mongo style query"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "findOne",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#findOne",
+    "access": null,
+    "description": "finds a single object of type matching the given query",
+    "lineNumber": 105,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "type",
+        "description": "the object types"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "query",
+        "description": "a mongo style query"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "remove",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#remove",
+    "access": null,
+    "description": "removes all objects of type matching the given query",
+    "lineNumber": 124,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "type",
+        "description": "the object types"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "query",
+        "description": "a mongo style query"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "tests/unit_tests/mongo_connection_tests.js",
+    "memberof": null,
+    "longname": "tests/unit_tests/mongo_connection_tests.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "'use strict';\nimport MongoConnection from '../../src/mongo_connection';\nimport sinon from 'sinon';\nimport {\n  expect\n}\nfrom 'chai';\n\n/** @test {MongoConnection} */\ndescribe('MongoConnection', () => {\n  let mongoConnection;\n  before(() => {\n    mongoConnection = new MongoConnection();\n  });\n  /** @test {MongoConnection#open} */\n  describe('MongoConnection#open', () => {\n    describe('with existing connection', () => {\n      let connection = {};\n      let clock;\n      let result;\n      let originalTimeoutCalled = false;\n      before(() => {\n        clock = sinon.useFakeTimers();\n        mongoConnection._connection = connection;\n        mongoConnection._connectionTimeout = setTimeout(() => {\n          originalTimeoutCalled = true;\n        }, 100);\n        return mongoConnection.open().then((c) => {\n          result = c;\n        });\n      });\n      after(() => {\n        delete mongoConnection._connection;\n        clearTimeout(mongoConnection._connectionTimeout);\n        delete mongoConnection._connectionTimeout;\n        clock.restore();\n      });\n      it('reuses connection', () => {\n        return expect(result).to.eql(connection);\n      });\n      it('resets timeout', () => {\n        return Promise.resolve()\n          .then(() => {\n            clock.tick(1000);\n          }).then(() => {\n            return expect(originalTimeoutCalled).to.eql(false) &&\n              expect(mongoConnection._connectionTimeout).to.exist;\n          });\n      });\n    });\n    describe('without existing connection', () => {\n      let connection = {\n        closeAsync: sinon.stub().returns(Promise.resolve(null))\n      };\n      let clock;\n      let result;\n      before(() => {\n        clock = sinon.useFakeTimers();\n        sinon.stub(mongoConnection._mongoClient, 'connectAsync').returns(Promise.resolve(connection));\n        return mongoConnection.open().then((c) => {\n          result = c;\n        });\n      });\n      after(() => {\n        delete mongoConnection._connection;\n        clearTimeout(mongoConnection._connectionTimeout);\n        delete mongoConnection._connectionTimeout;\n        clock.restore();\n      });\n      it('returns connection', () => {\n        return expect(result).to.eql(connection);\n      });\n      it('saves connection', () => {\n        return expect(mongoConnection._connection).to.eql(connection);\n      });\n      it('sets timeout', () => {\n        return Promise.resolve()\n          .then(() => {\n            return expect(connection.closeAsync).to.not.have.been.called;\n          })\n          .then(() => {\n            clock.tick(2200);\n          }).then(() => {\n            return expect(connection.closeAsync).to.have.been.called;\n          }).then(() => {\n            return expect(mongoConnection._connection).to.not.exist;\n          }).then(() => {\n            mongoConnection._connection = connection;\n          });\n      });\n    });\n  });\n});\n"
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe0",
+    "testId": 0,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js",
+    "testDepth": 0,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0",
+    "access": null,
+    "description": "MongoConnection",
+    "lineNumber": 10,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{MongoConnection}"
+      }
+    ],
+    "testTargets": [
+      "MongoConnection"
+    ]
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe1",
+    "testId": 1,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0",
+    "testDepth": 1,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1",
+    "access": null,
+    "description": "MongoConnection#open",
+    "lineNumber": 16,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{MongoConnection#open}"
+      }
+    ],
+    "testTargets": [
+      "MongoConnection#open"
+    ]
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe2",
+    "testId": 2,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe2",
+    "access": null,
+    "description": "with existing connection",
+    "lineNumber": 17
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it3",
+    "testId": 3,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe2",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe2.it3",
+    "access": null,
+    "description": "reuses connection",
+    "lineNumber": 38
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it4",
+    "testId": 4,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe2",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe2.it4",
+    "access": null,
+    "description": "resets timeout",
+    "lineNumber": 41
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe5",
+    "testId": 5,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5",
+    "access": null,
+    "description": "without existing connection",
+    "lineNumber": 51
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it6",
+    "testId": 6,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5.it6",
+    "access": null,
+    "description": "returns connection",
+    "lineNumber": 70
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it7",
+    "testId": 7,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5.it7",
+    "access": null,
+    "description": "saves connection",
+    "lineNumber": 73
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it8",
+    "testId": 8,
+    "memberof": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/mongo_connection_tests.js~describe0.describe1.describe5.it8",
+    "access": null,
+    "description": "sets timeout",
+    "lineNumber": 76
+  },
+  {
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "tests/unit_tests/pipeline_tests.js",
+    "memberof": null,
+    "longname": "tests/unit_tests/pipeline_tests.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "'use strict';\nimport sinon from 'sinon';\nimport Context from '@hoist/context';\nimport {\n  expect\n}\nfrom 'chai';\nimport Pipeline from '../../src/pipeline';\n/** @test {DataPipeline} */\ndescribe('DataPipeline', function () {\n  let dataPipeline;\n  before(() => {\n    dataPipeline = new Pipeline();\n  });\n  describe('with bucket', function () {\n    var findResults = [{\n      _id: 1\n    }, {\n      _id: 2\n    }];\n\n    function StubConnection() {\n      this.collection = sinon.stub().returnsThis();\n      this.db = sinon.stub().returnsThis();\n      this.find = sinon.stub().returnsThis();\n      this.findOne = sinon.stub().yields(null, findResults[0]);\n      this.toArray = sinon.stub().yields(null, findResults);\n      this.updateOne = sinon.stub().yields();\n      this.close = sinon.stub();\n    }\n    var context = new Context({\n      application: {\n        dataKey: 'datakey'\n      },\n      environment: 'dev',\n      bucket: {\n        _id: 'bucket'\n      }\n    });\n    /** @test {DataPipeline#find} */\n    describe('DataPipeline#find', function () {\n      var result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.find('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:bucket:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults);\n      });\n      it('calls find', function () {\n        expect(stubConnection.find)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n    });\n    /** @test {DataPipeline#findOne} */\n    describe('DataPipeline#findOne', function () {\n      let result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.findOne('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:bucket:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults[0]);\n      });\n      it('calls findOne with correct id', function () {\n        expect(stubConnection.findOne)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n    });\n    describe('DataPipeline#save', function () {\n      var result;\n      let stubConnection;\n      let clock;\n      before(function () {\n        clock = sinon.useFakeTimers();\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.save('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        clock.restore();\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:bucket:people');\n      });\n      it('returns result from findOne', function () {\n        return expect(result).to.eql({\n          _id: 1\n        });\n      });\n      it('saves correct update', function () {\n        return expect(stubConnection.updateOne)\n          .to.have.been.calledWith({\n            _id: \"id\"\n          }, {\n            $set: {\n              _type: \"people\",\n              _updatedDate: Date()\n            },\n            $setOnInsert: {\n              _createdDate: Date()\n            }\n          }, {\n            upsert: true\n          });\n      });\n    });\n  });\n  describe('without bucket', function () {\n\n    var findResults = [{\n      _id: 1\n    }, {\n      _id: 2\n    }];\n\n    function StubConnection() {\n      this.collection = sinon.stub().returnsThis();\n      this.db = sinon.stub().returnsThis();\n      this.find = sinon.stub().returnsThis();\n      this.findOne = sinon.stub().callsArgWith(1, null, findResults[0]);\n      this.toArray = sinon.stub().callsArgWith(0, null, findResults);\n      this.close = sinon.stub();\n    }\n\n\n    var context = new Context({\n      application: {\n        dataKey: 'datakey'\n      },\n      environment: 'dev'\n    });\n    /** @test {DataPipeline#find} */\n    describe('DataPipeline#find', function () {\n\n      let result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.find('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:global:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults);\n      });\n      it('calls find', function () {\n        expect(stubConnection.find)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n      it('calls toArray', function () {\n        return expect(stubConnection.toArray)\n          .to.have.been.called;\n      });\n    });\n    /** @test {DataPipeline#findOne} */\n    describe('DataPipeline#findOne', function () {\n      var result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.findOne('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:global:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults[0]);\n      });\n      it('calls findOne', function () {\n        expect(stubConnection.findOne)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n    });\n  });\n});\n"
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe9",
+    "testId": 9,
+    "memberof": "tests/unit_tests/pipeline_tests.js",
+    "testDepth": 0,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9",
+    "access": null,
+    "description": "DataPipeline",
+    "lineNumber": 10,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{DataPipeline}"
+      }
+    ],
+    "testTargets": [
+      "DataPipeline"
+    ]
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe10",
+    "testId": 10,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9",
+    "testDepth": 1,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10",
+    "access": null,
+    "description": "with bucket",
+    "lineNumber": 15
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe11",
+    "testId": 11,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11",
+    "access": null,
+    "description": "DataPipeline#find",
+    "lineNumber": 41,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{DataPipeline#find}"
+      }
+    ],
+    "testTargets": [
+      "DataPipeline#find"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it12",
+    "testId": 12,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11.it12",
+    "access": null,
+    "description": "uses the application/environment db",
+    "lineNumber": 58
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it13",
+    "testId": 13,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11.it13",
+    "access": null,
+    "description": "uses the correct collection",
+    "lineNumber": 62
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it14",
+    "testId": 14,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11.it14",
+    "access": null,
+    "description": "returns result",
+    "lineNumber": 66
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it15",
+    "testId": 15,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe11.it15",
+    "access": null,
+    "description": "calls find",
+    "lineNumber": 69
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe16",
+    "testId": 16,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16",
+    "access": null,
+    "description": "DataPipeline#findOne",
+    "lineNumber": 77,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{DataPipeline#findOne}"
+      }
+    ],
+    "testTargets": [
+      "DataPipeline#findOne"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it17",
+    "testId": 17,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16.it17",
+    "access": null,
+    "description": "uses the application/environment db",
+    "lineNumber": 94
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it18",
+    "testId": 18,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16.it18",
+    "access": null,
+    "description": "uses the correct collection",
+    "lineNumber": 98
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it19",
+    "testId": 19,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16.it19",
+    "access": null,
+    "description": "returns result",
+    "lineNumber": 102
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it20",
+    "testId": 20,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe16.it20",
+    "access": null,
+    "description": "calls findOne with correct id",
+    "lineNumber": 105
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe21",
+    "testId": 21,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21",
+    "access": null,
+    "description": "DataPipeline#save",
+    "lineNumber": 112
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it22",
+    "testId": 22,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21.it22",
+    "access": null,
+    "description": "uses the application/environment db",
+    "lineNumber": 132
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it23",
+    "testId": 23,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21.it23",
+    "access": null,
+    "description": "uses the correct collection",
+    "lineNumber": 136
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it24",
+    "testId": 24,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21.it24",
+    "access": null,
+    "description": "returns result from findOne",
+    "lineNumber": 140
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it25",
+    "testId": 25,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe10.describe21.it25",
+    "access": null,
+    "description": "saves correct update",
+    "lineNumber": 145
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe26",
+    "testId": 26,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9",
+    "testDepth": 1,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26",
+    "access": null,
+    "description": "without bucket",
+    "lineNumber": 163
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe27",
+    "testId": 27,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27",
+    "access": null,
+    "description": "DataPipeline#find",
+    "lineNumber": 188,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{DataPipeline#find}"
+      }
+    ],
+    "testTargets": [
+      "DataPipeline#find"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it28",
+    "testId": 28,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27.it28",
+    "access": null,
+    "description": "uses the application/environment db",
+    "lineNumber": 206
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it29",
+    "testId": 29,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27.it29",
+    "access": null,
+    "description": "uses the correct collection",
+    "lineNumber": 210
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it30",
+    "testId": 30,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27.it30",
+    "access": null,
+    "description": "returns result",
+    "lineNumber": 214
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it31",
+    "testId": 31,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27.it31",
+    "access": null,
+    "description": "calls find",
+    "lineNumber": 217
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it32",
+    "testId": 32,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe27.it32",
+    "access": null,
+    "description": "calls toArray",
+    "lineNumber": 223
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe33",
+    "testId": 33,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26",
+    "testDepth": 2,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33",
+    "access": null,
+    "description": "DataPipeline#findOne",
+    "lineNumber": 229,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{DataPipeline#findOne}"
+      }
+    ],
+    "testTargets": [
+      "DataPipeline#findOne"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it34",
+    "testId": 34,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33.it34",
+    "access": null,
+    "description": "uses the application/environment db",
+    "lineNumber": 246
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it35",
+    "testId": 35,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33.it35",
+    "access": null,
+    "description": "uses the correct collection",
+    "lineNumber": 250
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it36",
+    "testId": 36,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33.it36",
+    "access": null,
+    "description": "returns result",
+    "lineNumber": 254
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it37",
+    "testId": 37,
+    "memberof": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33",
+    "testDepth": 3,
+    "longname": "tests/unit_tests/pipeline_tests.js~describe9.describe26.describe33.it37",
+    "access": null,
+    "description": "calls findOne",
+    "lineNumber": 257
+  }
+]

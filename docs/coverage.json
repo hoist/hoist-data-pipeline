@@ -1,0 +1,19 @@
+{
+  "coverage": "100%",
+  "expectCount": 13,
+  "actualCount": 13,
+  "files": {
+    "src/pipeline.js": {
+      "expectCount": 6,
+      "actualCount": 6
+    },
+    "src/mongo_connection.js": {
+      "expectCount": 4,
+      "actualCount": 4
+    },
+    "src/helpers.js": {
+      "expectCount": 3,
+      "actualCount": 3
+    }
+  }
+}
