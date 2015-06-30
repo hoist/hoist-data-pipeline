@@ -517,7 +517,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "'use strict';\nimport util from 'util';\nimport MongoConnection from './mongo_connection';\nimport Context from '@hoist/context';\nimport {\n  requiredFieldsTransformer,\n  timestampsTransformer,\n  getCollectionName\n}\nfrom './helpers';\nimport Bluebird from 'bluebird';\n/**\n * application data api pipeline\n */\nclass DataPipeline {\n  /**\n   * create a new pipeline\n   */\n  constructor() {\n    this._connection = new MongoConnection();\n  }\n\n  /**\n   * save an object or set of objects as a type\n   * @param {string} type - the object types\n   * @param {object|Array<object>} objOrArray - the object(s) to save\n   * @returns {Promise}\n   */\n  save(type, objOrArray) {\n    var arrayObj = [].concat(objOrArray);\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        return Promise.all(arrayObj.map((obj) => {\n          return Promise.resolve(requiredFieldsTransformer(type, obj))\n            .then((data) => {\n              return timestampsTransformer(data);\n            }).then((data) => {\n              var db = connection.db(context.application.dataKey);\n              var collection = Bluebird.promisifyAll(db.collection(getCollectionName(data._type, context)));\n              var createdDate = new Date();\n              if (data._createdDate) {\n                createdDate = data._createdDate;\n                delete data._createdDate;\n              }\n              var id = data._id;\n              delete data._id;\n              return collection.updateOneAsync({\n                _id: id\n              }, {\n                $set: data,\n                $setOnInsert: {\n                  _createdDate: createdDate\n                }\n              }, {\n                upsert: true\n              }).then(function () {\n                return collection.findOneAsync({\n                  _id: id\n                });\n              });\n            });\n\n        }));\n      });\n    }).then((savedData) => {\n      if (!util.isArray(objOrArray)) {\n        if (savedData.length < 2) {\n          if (savedData.length < 1) {\n            return null;\n          } else {\n            return savedData[0];\n          }\n        }\n      }\n      return savedData;\n    });\n  }\n\n  /**\n   * finds all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  find(type, query) {\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        //throw new Error();\n        var db = connection.db(context.application.dataKey);\n        var collection = db.collection(getCollectionName(type, context));\n        return Bluebird.promisifyAll(collection.find(query)).toArrayAsync()\n          .then(function (results) {\n            return Promise.resolve(results);\n          });\n      });\n    });\n  }\n\n  /**\n   * finds a single object of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  findOne(type, query) {\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.findOneAsync(query)\n          .then(function (results) {\n            return results;\n          });\n      });\n    });\n  }\n\n  /**\n   * removes all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  remove(type, query) {\n    return Context.get().then((context) => {\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.removeAsync(query)\n          .then(function (results) {\n            return results;\n          });\n      });\n    });\n  }\n}\n\nexport default DataPipeline;\n"
+    "content": "'use strict';\nimport util from 'util';\nimport MongoConnection from './mongo_connection';\nimport Context from '@hoist/context';\nimport {\n  requiredFieldsTransformer,\n  timestampsTransformer,\n  getCollectionName\n}\nfrom './helpers';\nimport Bluebird from 'bluebird';\nimport logger from '@hoist/logger';\n/**\n * application data api pipeline\n */\nclass DataPipeline {\n  /**\n   * create a new pipeline\n   */\n  constructor() {\n    this._connection = new MongoConnection();\n    let applicationId;\n    let context = Context.current();\n    if (context && context.application) {\n      applicationId = context.application._id;\n    }\n    this._logger = logger.child({\n      cls: this.constructor.name,\n      applicationId: applicationId\n    });\n  }\n\n  /**\n   * save an object or set of objects as a type\n   * @param {string} type - the object types\n   * @param {object|Array<object>} objOrArray - the object(s) to save\n   * @returns {Promise}\n   */\n  save(type, objOrArray) {\n    var arrayObj = [].concat(objOrArray);\n    this._logger.info('saving data');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection');\n      return this._connection.open().then((connection) => {\n        return Promise.all(arrayObj.map((obj) => {\n          return Promise.resolve(requiredFieldsTransformer(type, obj))\n            .then((data) => {\n              return timestampsTransformer(data);\n            }).then((data) => {\n              this._logger.info('sending to mongo');\n              var db = connection.db(context.application.dataKey);\n              var collection = Bluebird.promisifyAll(db.collection(getCollectionName(data._type, context)));\n              var createdDate = new Date();\n              if (data._createdDate) {\n                createdDate = data._createdDate;\n                delete data._createdDate;\n              }\n              var id = data._id;\n              delete data._id;\n              return collection.updateOneAsync({\n                _id: id\n              }, {\n                $set: data,\n                $setOnInsert: {\n                  _createdDate: createdDate\n                }\n              }, {\n                upsert: true\n              }).then(() => {\n                this._logger.info('finding post save');\n                return collection.findOneAsync({\n                  _id: id\n                });\n              });\n            });\n\n        }));\n      });\n    }).then((savedData) => {\n      if (!util.isArray(objOrArray)) {\n        if (savedData.length < 2) {\n          if (savedData.length < 1) {\n            return null;\n          } else {\n            return savedData[0];\n          }\n        }\n      }\n      return savedData;\n    });\n  }\n\n  /**\n   * finds all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  find(type, query) {\n    this._logger.info('finding data');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection data');\n      return this._connection.open().then((connection) => {\n        //throw new Error();\n        var db = connection.db(context.application.dataKey);\n        var collection = db.collection(getCollectionName(type, context));\n        return Bluebird.promisifyAll(collection.find(query)).toArrayAsync()\n          .then((results) => {\n            this._logger.info('retrieved data');\n            return Promise.resolve(results);\n          });\n      });\n    });\n  }\n\n  /**\n   * finds a single object of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  findOne(type, query) {\n    this._logger.info('finding single');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection');\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.findOneAsync(query)\n          .then((results) => {\n            this._logger.info('retrieved data');\n            return results;\n          });\n      });\n    });\n  }\n\n  /**\n   * removes all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  remove(type, query) {\n    this._logger.info('removing data');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection');\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.removeAsync(query)\n          .then((results) => {\n            this._logger.info('removed data');\n            return results;\n          });\n      });\n    });\n  }\n}\n\nexport default DataPipeline;\n"
   },
   {
     "kind": "class",
@@ -531,7 +531,7 @@
     "importPath": "@hoist/data-pipeline/src/pipeline.js",
     "importStyle": "DataPipeline",
     "description": "application data api pipeline",
-    "lineNumber": 15,
+    "lineNumber": 16,
     "interface": false
   },
   {
@@ -543,7 +543,7 @@
     "longname": "src/pipeline.js~DataPipeline#constructor",
     "access": null,
     "description": "create a new pipeline",
-    "lineNumber": 19,
+    "lineNumber": 20,
     "params": [],
     "generator": false
   },
@@ -556,7 +556,24 @@
     "longname": "src/pipeline.js~DataPipeline#_connection",
     "access": null,
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 21,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_logger",
+    "memberof": "src/pipeline.js~DataPipeline",
+    "longname": "src/pipeline.js~DataPipeline#_logger",
+    "access": null,
+    "description": null,
+    "lineNumber": 27,
     "undocument": true,
     "type": {
       "types": [
@@ -573,7 +590,7 @@
     "longname": "src/pipeline.js~DataPipeline#save",
     "access": null,
     "description": "save an object or set of objects as a type",
-    "lineNumber": 29,
+    "lineNumber": 39,
     "unknown": [
       {
         "tagName": "@returns",
@@ -621,7 +638,7 @@
     "longname": "src/pipeline.js~DataPipeline#find",
     "access": null,
     "description": "finds all objects of type matching the given query",
-    "lineNumber": 85,
+    "lineNumber": 99,
     "unknown": [
       {
         "tagName": "@returns",
@@ -669,7 +686,7 @@
     "longname": "src/pipeline.js~DataPipeline#findOne",
     "access": null,
     "description": "finds a single object of type matching the given query",
-    "lineNumber": 105,
+    "lineNumber": 122,
     "unknown": [
       {
         "tagName": "@returns",
@@ -717,7 +734,7 @@
     "longname": "src/pipeline.js~DataPipeline#remove",
     "access": null,
     "description": "removes all objects of type matching the given query",
-    "lineNumber": 124,
+    "lineNumber": 144,
     "unknown": [
       {
         "tagName": "@returns",

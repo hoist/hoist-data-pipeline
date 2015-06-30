@@ -67,6 +67,7 @@ import {
 }
 from &apos;./helpers&apos;;
 import Bluebird from &apos;bluebird&apos;;
+import logger from &apos;@hoist/logger&apos;;
 /**
  * application data api pipeline
  */
@@ -76,6 +77,15 @@ class DataPipeline {
    */
   constructor() {
     this._connection = new MongoConnection();
+    let applicationId;
+    let context = Context.current();
+    if (context &amp;&amp; context.application) {
+      applicationId = context.application._id;
+    }
+    this._logger = logger.child({
+      cls: this.constructor.name,
+      applicationId: applicationId
+    });
   }
 
   /**
@@ -86,13 +96,16 @@ class DataPipeline {
    */
   save(type, objOrArray) {
     var arrayObj = [].concat(objOrArray);
+    this._logger.info(&apos;saving data&apos;);
     return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection&apos;);
       return this._connection.open().then((connection) =&gt; {
         return Promise.all(arrayObj.map((obj) =&gt; {
           return Promise.resolve(requiredFieldsTransformer(type, obj))
             .then((data) =&gt; {
               return timestampsTransformer(data);
             }).then((data) =&gt; {
+              this._logger.info(&apos;sending to mongo&apos;);
               var db = connection.db(context.application.dataKey);
               var collection = Bluebird.promisifyAll(db.collection(getCollectionName(data._type, context)));
               var createdDate = new Date();
@@ -111,7 +124,8 @@ class DataPipeline {
                 }
               }, {
                 upsert: true
-              }).then(function () {
+              }).then(() =&gt; {
+                this._logger.info(&apos;finding post save&apos;);
                 return collection.findOneAsync({
                   _id: id
                 });
@@ -141,13 +155,16 @@ class DataPipeline {
    * @returns {Promise}
    */
   find(type, query) {
+    this._logger.info(&apos;finding data&apos;);
     return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection data&apos;);
       return this._connection.open().then((connection) =&gt; {
         //throw new Error();
         var db = connection.db(context.application.dataKey);
         var collection = db.collection(getCollectionName(type, context));
         return Bluebird.promisifyAll(collection.find(query)).toArrayAsync()
-          .then(function (results) {
+          .then((results) =&gt; {
+            this._logger.info(&apos;retrieved data&apos;);
             return Promise.resolve(results);
           });
       });
@@ -161,12 +178,15 @@ class DataPipeline {
    * @returns {Promise}
    */
   findOne(type, query) {
+    this._logger.info(&apos;finding single&apos;);
     return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection&apos;);
       return this._connection.open().then((connection) =&gt; {
         var db = connection.db(context.application.dataKey);
         var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));
         return collection.findOneAsync(query)
-          .then(function (results) {
+          .then((results) =&gt; {
+            this._logger.info(&apos;retrieved data&apos;);
             return results;
           });
       });
@@ -180,12 +200,15 @@ class DataPipeline {
    * @returns {Promise}
    */
   remove(type, query) {
+    this._logger.info(&apos;removing data&apos;);
     return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection&apos;);
       return this._connection.open().then((connection) =&gt; {
         var db = connection.db(context.application.dataKey);
         var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));
         return collection.removeAsync(query)
-          .then(function (results) {
+          .then((results) =&gt; {
+            this._logger.info(&apos;removed data&apos;);
             return results;
           });
       });
