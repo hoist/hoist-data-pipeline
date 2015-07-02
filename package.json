@@ -1,6 +1,6 @@
 {
   "name": "@hoist/data-pipeline",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Data pipeline between JSON data and Hoist Data Store",
   "main": "lib/pipeline.js",
   "scripts": {
