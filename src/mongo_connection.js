@@ -46,7 +46,7 @@ class MongoConnection {
         this._connection = connection;
         return connection;
       });
-  };
+  }
 
   /**
    * close any open connection to mongo
@@ -74,7 +74,7 @@ class MongoConnection {
       return this._openConnection();
     }
 
-  };
+  }
 }
 
 export default MongoConnection;
