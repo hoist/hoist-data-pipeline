@@ -31,8 +31,10 @@ class MongoConnection {
       clearTimeout(this._connectionTimeout);
     }
     this._connectionTimeout = setTimeout(() => {
-      this._connection.closeAsync();
-      delete this._connection;
+      if (this._connection) {
+        this._connection.closeAsync();
+        delete this._connection;
+      }
     }, 2000);
   }
   _openConnection() {
