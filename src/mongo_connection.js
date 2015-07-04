@@ -1,9 +1,9 @@
 'use strict';
-var BBPromise = require('bluebird');
-var mongodb = require('mongodb');
-var config = require('config');
-var logger = require('@hoist/logger');
-BBPromise.promisifyAll(mongodb.MongoClient);
+import Bluebird from 'bluebird';
+import mongodb from 'mongodb';
+import config from 'config';
+import logger from '@hoist/logger';
+Bluebird.promisifyAll(mongodb.MongoClient);
 /**
  * marshalling class for connection to mongodb
  */
@@ -46,6 +46,7 @@ class MongoConnection {
         this._resetTimeout();
         this._logger.info('connection opened');
         this._connection = connection;
+        Bluebird.promisifyAll(this._connection);
         return connection;
       });
   }

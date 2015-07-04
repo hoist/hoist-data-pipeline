@@ -228,87 +228,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "'use strict';\nvar BBPromise = require('bluebird');\nvar mongodb = require('mongodb');\nvar config = require('config');\nvar logger = require('@hoist/logger');\nBBPromise.promisifyAll(mongodb.MongoClient);\n/**\n * marshalling class for connection to mongodb\n */\nclass MongoConnection {\n  /**\n   * create a new instance\n   */\n  constructor() {\n    this._mongoClient = mongodb.MongoClient;\n    this._logger = logger.child({\n      cls: this.constructor.name\n    });\n  }\n\n\n  _clearTimeout() {\n    if (this._connectionTimeout) {\n      this._logger.info('clearing timeout');\n      clearTimeout(this._connectionTimeout);\n    }\n  }\n  _resetTimeout() {\n    if (this._connectionTimeout) {\n      this._logger.info('clearing timeout');\n      clearTimeout(this._connectionTimeout);\n    }\n    this._connectionTimeout = setTimeout(() => {\n      if (this._connection) {\n        this._connection.closeAsync();\n        delete this._connection;\n      }\n    }, 2000);\n  }\n  _openConnection() {\n    this._clearTimeout();\n    return this._mongoClient\n      .connectAsync(config.get('Hoist.mongo.applications'))\n      .then((connection) => {\n        //close connection after 2 seconds of inactivity\n        this._resetTimeout();\n        this._logger.info('connection opened');\n        this._connection = connection;\n        return connection;\n      });\n  }\n\n  /**\n   * close any open connection to mongo\n   * @returns {Promise}\n   */\n  close() {\n    if (!this._connection) {\n      return Promise.resolve();\n    }\n    this._clearTimeout();\n    let connection = this._connection;\n    delete this._connection;\n    return connection.closeAsync();\n  }\n\n  /**\n   * Attempt to reuse mongo connection or open one if it doesn't exist\n   * @returns {Promise}\n   */\n  open() {\n    if (this._connection) {\n      this._resetTimeout();\n      return Promise.resolve(this._connection);\n    } else {\n      return this._openConnection();\n    }\n\n  }\n}\n\nexport default MongoConnection;\n"
-  },
-  {
-    "kind": "variable",
-    "static": true,
-    "variation": null,
-    "name": "BBPromise",
-    "memberof": "src/mongo_connection.js",
-    "longname": "src/mongo_connection.js~BBPromise",
-    "access": null,
-    "export": false,
-    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 2,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "kind": "variable",
-    "static": true,
-    "variation": null,
-    "name": "mongodb",
-    "memberof": "src/mongo_connection.js",
-    "longname": "src/mongo_connection.js~mongodb",
-    "access": null,
-    "export": false,
-    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "kind": "variable",
-    "static": true,
-    "variation": null,
-    "name": "config",
-    "memberof": "src/mongo_connection.js",
-    "longname": "src/mongo_connection.js~config",
-    "access": null,
-    "export": false,
-    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "kind": "variable",
-    "static": true,
-    "variation": null,
-    "name": "logger",
-    "memberof": "src/mongo_connection.js",
-    "longname": "src/mongo_connection.js~logger",
-    "access": null,
-    "export": false,
-    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
+    "content": "'use strict';\nimport Bluebird from 'bluebird';\nimport mongodb from 'mongodb';\nimport config from 'config';\nimport logger from '@hoist/logger';\nBluebird.promisifyAll(mongodb.MongoClient);\n/**\n * marshalling class for connection to mongodb\n */\nclass MongoConnection {\n  /**\n   * create a new instance\n   */\n  constructor() {\n    this._mongoClient = mongodb.MongoClient;\n    this._logger = logger.child({\n      cls: this.constructor.name\n    });\n  }\n\n\n  _clearTimeout() {\n    if (this._connectionTimeout) {\n      this._logger.info('clearing timeout');\n      clearTimeout(this._connectionTimeout);\n    }\n  }\n  _resetTimeout() {\n    if (this._connectionTimeout) {\n      this._logger.info('clearing timeout');\n      clearTimeout(this._connectionTimeout);\n    }\n    this._connectionTimeout = setTimeout(() => {\n      if (this._connection) {\n        this._connection.closeAsync();\n        delete this._connection;\n      }\n    }, 2000);\n  }\n  _openConnection() {\n    this._clearTimeout();\n    return this._mongoClient\n      .connectAsync(config.get('Hoist.mongo.applications'))\n      .then((connection) => {\n        //close connection after 2 seconds of inactivity\n        this._resetTimeout();\n        this._logger.info('connection opened');\n        this._connection = connection;\n        Bluebird.promisifyAll(this._connection);\n        return connection;\n      });\n  }\n\n  /**\n   * close any open connection to mongo\n   * @returns {Promise}\n   */\n  close() {\n    if (!this._connection) {\n      return Promise.resolve();\n    }\n    this._clearTimeout();\n    let connection = this._connection;\n    delete this._connection;\n    return connection.closeAsync();\n  }\n\n  /**\n   * Attempt to reuse mongo connection or open one if it doesn't exist\n   * @returns {Promise}\n   */\n  open() {\n    if (this._connection) {\n      this._resetTimeout();\n      return Promise.resolve(this._connection);\n    } else {\n      return this._openConnection();\n    }\n\n  }\n}\n\nexport default MongoConnection;\n"
   },
   {
     "kind": "class",
@@ -462,7 +382,7 @@
     "longname": "src/mongo_connection.js~MongoConnection#close",
     "access": null,
     "description": "close any open connection to mongo",
-    "lineNumber": 57,
+    "lineNumber": 58,
     "unknown": [
       {
         "tagName": "@returns",
@@ -489,7 +409,7 @@
     "longname": "src/mongo_connection.js~MongoConnection#open",
     "access": null,
     "description": "Attempt to reuse mongo connection or open one if it doesn't exist",
-    "lineNumber": 71,
+    "lineNumber": 72,
     "unknown": [
       {
         "tagName": "@returns",

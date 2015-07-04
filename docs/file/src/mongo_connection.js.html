@@ -57,11 +57,11 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/mongo_connection.js</h1>
 <pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
-var BBPromise = require(&apos;bluebird&apos;);
-var mongodb = require(&apos;mongodb&apos;);
-var config = require(&apos;config&apos;);
-var logger = require(&apos;@hoist/logger&apos;);
-BBPromise.promisifyAll(mongodb.MongoClient);
+import Bluebird from &apos;bluebird&apos;;
+import mongodb from &apos;mongodb&apos;;
+import config from &apos;config&apos;;
+import logger from &apos;@hoist/logger&apos;;
+Bluebird.promisifyAll(mongodb.MongoClient);
 /**
  * marshalling class for connection to mongodb
  */
@@ -104,6 +104,7 @@ class MongoConnection {
         this._resetTimeout();
         this._logger.info(&apos;connection opened&apos;);
         this._connection = connection;
+        Bluebird.promisifyAll(this._connection);
         return connection;
       });
   }
