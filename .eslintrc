@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "quotes": [0],
+    "no-underscore-dangle": 0,
+    "no-process-exit": 0
+  },
+  "env": {
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "jsx": true
+  }
+}

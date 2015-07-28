@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/pipeline.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="git@github.com:hoist/hoist-data-pipeline.git">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/pipeline.js~DataPipeline.html">DataPipeline</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></li>
+</ul>
+</div>
+
+
+
+<div data-ice="functionWrap">
+  <h2><a href="function/">Function</a></h2>
+  <ul>
+    
+  <li data-ice="functionDoc"><span><a href="function/index.html#static-function-getCollectionName">getCollectionName</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-requiredFieldsTransformer">requiredFieldsTransformer</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-timestampsTransformer">timestampsTransformer</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/pipeline.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
+import util from &apos;util&apos;;
+import MongoConnection from &apos;./mongo_connection&apos;;
+import Context from &apos;@hoist/context&apos;;
+import {
+  requiredFieldsTransformer,
+  timestampsTransformer,
+  getCollectionName
+}
+from &apos;./helpers&apos;;
+import Bluebird from &apos;bluebird&apos;;
+import logger from &apos;@hoist/logger&apos;;
+/**
+ * application data api pipeline
+ */
+class DataPipeline {
+  /**
+   * create a new pipeline
+   */
+  constructor() {
+    this._connection = new MongoConnection();
+    let applicationId;
+    let context = Context.current();
+    if (context &amp;&amp; context.application) {
+      applicationId = context.application._id;
+    }
+    this._logger = logger.child({
+      cls: this.constructor.name,
+      applicationId: applicationId
+    });
+  }
+
+  /**
+   * save an object or set of objects as a type
+   * @param {string} type - the object types
+   * @param {object|Array&lt;object&gt;} objOrArray - the object(s) to save
+   * @returns {Promise}
+   */
+  save(type, objOrArray) {
+    var arrayObj = [].concat(objOrArray);
+    this._logger.info(&apos;saving data&apos;);
+    return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection&apos;);
+      return this._connection.open().then((connection) =&gt; {
+        return Promise.all(arrayObj.map((obj) =&gt; {
+          return Promise.resolve(requiredFieldsTransformer(type, obj))
+            .then((data) =&gt; {
+              return timestampsTransformer(data);
+            }).then((data) =&gt; {
+              this._logger.info(&apos;sending to mongo&apos;);
+              var db = connection.db(context.application.dataKey);
+              var collection = Bluebird.promisifyAll(db.collection(getCollectionName(data._type, context)));
+              var createdDate = new Date();
+              if (data._createdDate) {
+                createdDate = data._createdDate;
+                delete data._createdDate;
+              }
+              var id = data._id;
+              delete data._id;
+              return collection.updateOneAsync({
+                _id: id
+              }, {
+                $set: data,
+                $setOnInsert: {
+                  _createdDate: createdDate
+                }
+              }, {
+                upsert: true
+              }).then(() =&gt; {
+                this._logger.info(&apos;finding post save&apos;);
+                return collection.findOneAsync({
+                  _id: id
+                });
+              });
+            });
+
+        }));
+      });
+    }).then((savedData) =&gt; {
+      if (!util.isArray(objOrArray)) {
+        if (savedData.length &lt; 2) {
+          if (savedData.length &lt; 1) {
+            return null;
+          } else {
+            return savedData[0];
+          }
+        }
+      }
+      return savedData;
+    });
+  }
+
+  /**
+   * finds all objects of type matching the given query
+   * @param {string} type - the object types
+   * @param {object} query - a mongo style query
+   * @returns {Promise}
+   */
+  find(type, query) {
+    this._logger.info(&apos;finding data&apos;);
+    return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection data&apos;);
+      return this._connection.open().then((connection) =&gt; {
+        //throw new Error();
+        var db = connection.db(context.application.dataKey);
+        var collection = db.collection(getCollectionName(type, context));
+        return Bluebird.promisifyAll(collection.find(query)).toArrayAsync()
+          .then((results) =&gt; {
+            this._logger.info(&apos;retrieved data&apos;);
+            return Promise.resolve(results);
+          });
+      });
+    });
+  }
+
+  /**
+   * finds a single object of type matching the given query
+   * @param {string} type - the object types
+   * @param {object} query - a mongo style query
+   * @returns {Promise}
+   */
+  findOne(type, query) {
+    this._logger.info(&apos;finding single&apos;);
+    return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection&apos;);
+      return this._connection.open().then((connection) =&gt; {
+        var db = connection.db(context.application.dataKey);
+        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));
+        return collection.findOneAsync(query)
+          .then((results) =&gt; {
+            this._logger.info(&apos;retrieved data&apos;);
+            return results;
+          });
+      });
+    });
+  }
+
+  /**
+   * removes all objects of type matching the given query
+   * @param {string} type - the object types
+   * @param {object} query - a mongo style query
+   * @returns {Promise}
+   */
+  remove(type, query) {
+    this._logger.info(&apos;removing data&apos;);
+    return Context.get().then((context) =&gt; {
+      this._logger.info(&apos;opening connection&apos;);
+      return this._connection.open().then((connection) =&gt; {
+        var db = connection.db(context.application.dataKey);
+        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));
+        return collection.removeAsync(query)
+          .then((results) =&gt; {
+            this._logger.info(&apos;removed data&apos;);
+            return results;
+          });
+      });
+    });
+  }
+}
+
+export default DataPipeline;
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.2)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

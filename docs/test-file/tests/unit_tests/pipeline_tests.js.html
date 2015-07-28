@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">tests/unit_tests/pipeline_tests.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="git@github.com:hoist/hoist-data-pipeline.git">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/pipeline.js~DataPipeline.html">DataPipeline</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></li>
+</ul>
+</div>
+
+
+
+<div data-ice="functionWrap">
+  <h2><a href="function/">Function</a></h2>
+  <ul>
+    
+  <li data-ice="functionDoc"><span><a href="function/index.html#static-function-getCollectionName">getCollectionName</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-requiredFieldsTransformer">requiredFieldsTransformer</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-timestampsTransformer">timestampsTransformer</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">tests/unit_tests/pipeline_tests.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
+import sinon from &apos;sinon&apos;;
+import Context from &apos;@hoist/context&apos;;
+import {
+  expect
+}
+from &apos;chai&apos;;
+import Pipeline from &apos;../../src/pipeline&apos;;
+/** @test {DataPipeline} */
+describe(&apos;DataPipeline&apos;, function () {
+  let dataPipeline;
+  before(() =&gt; {
+    dataPipeline = new Pipeline();
+  });
+  describe(&apos;with bucket&apos;, function () {
+    var findResults = [{
+      _id: 1
+    }, {
+      _id: 2
+    }];
+
+    function StubConnection() {
+      this.collection = sinon.stub().returnsThis();
+      this.db = sinon.stub().returnsThis();
+      this.find = sinon.stub().returnsThis();
+      this.findOne = sinon.stub().yields(null, findResults[0]);
+      this.toArray = sinon.stub().yields(null, findResults);
+      this.updateOne = sinon.stub().yields();
+      this.close = sinon.stub();
+    }
+    var context = new Context({
+      application: {
+        dataKey: &apos;datakey&apos;
+      },
+      environment: &apos;dev&apos;,
+      bucket: {
+        _id: &apos;bucket&apos;
+      }
+    });
+    /** @test {DataPipeline#find} */
+    describe(&apos;DataPipeline#find&apos;, function () {
+      var result;
+      let stubConnection;
+      before(function () {
+        stubConnection = new StubConnection();
+        sinon.stub(dataPipeline._connection, &apos;open&apos;).returns(Promise.resolve(stubConnection));
+        sinon.stub(Context, &apos;get&apos;).returns(Promise.resolve(context));
+        return dataPipeline.find(&apos;people&apos;, {
+          _id: &apos;id&apos;
+        }).then((r) =&gt; {
+          result = r;
+        });
+      });
+      after(function () {
+        dataPipeline._connection.open.restore();
+        Context.get.restore();
+      });
+      it(&apos;uses the application/environment db&apos;, function () {
+        return expect(stubConnection.db)
+          .to.have.been.calledWith(&apos;datakey&apos;);
+      });
+      it(&apos;uses the correct collection&apos;, function () {
+        return expect(stubConnection.collection)
+          .to.have.been.calledWith(&apos;dev:bucket:people&apos;);
+      });
+      it(&apos;returns result&apos;, function () {
+        expect(result).to.eql(findResults);
+      });
+      it(&apos;calls find&apos;, function () {
+        expect(stubConnection.find)
+          .to.have.been.calledWith({
+            _id: &apos;id&apos;
+          });
+      });
+    });
+    /** @test {DataPipeline#findOne} */
+    describe(&apos;DataPipeline#findOne&apos;, function () {
+      let result;
+      let stubConnection;
+      before(function () {
+        stubConnection = new StubConnection();
+        sinon.stub(dataPipeline._connection, &apos;open&apos;).returns(Promise.resolve(stubConnection));
+        sinon.stub(Context, &apos;get&apos;).returns(Promise.resolve(context));
+        return dataPipeline.findOne(&apos;people&apos;, {
+          _id: &apos;id&apos;
+        }).then((r) =&gt; {
+          result = r;
+        });
+      });
+      after(function () {
+        dataPipeline._connection.open.restore();
+        Context.get.restore();
+      });
+      it(&apos;uses the application/environment db&apos;, function () {
+        return expect(stubConnection.db)
+          .to.have.been.calledWith(&apos;datakey&apos;);
+      });
+      it(&apos;uses the correct collection&apos;, function () {
+        return expect(stubConnection.collection)
+          .to.have.been.calledWith(&apos;dev:bucket:people&apos;);
+      });
+      it(&apos;returns result&apos;, function () {
+        expect(result).to.eql(findResults[0]);
+      });
+      it(&apos;calls findOne with correct id&apos;, function () {
+        expect(stubConnection.findOne)
+          .to.have.been.calledWith({
+            _id: &apos;id&apos;
+          });
+      });
+    });
+    describe(&apos;DataPipeline#save&apos;, function () {
+      var result;
+      let stubConnection;
+      let clock;
+      before(function () {
+        clock = sinon.useFakeTimers();
+        stubConnection = new StubConnection();
+        sinon.stub(dataPipeline._connection, &apos;open&apos;).returns(Promise.resolve(stubConnection));
+        sinon.stub(Context, &apos;get&apos;).returns(Promise.resolve(context));
+        return dataPipeline.save(&apos;people&apos;, {
+          _id: &apos;id&apos;
+        }).then((r) =&gt; {
+          result = r;
+        });
+      });
+      after(function () {
+        clock.restore();
+        dataPipeline._connection.open.restore();
+        Context.get.restore();
+      });
+      it(&apos;uses the application/environment db&apos;, function () {
+        return expect(stubConnection.db)
+          .to.have.been.calledWith(&apos;datakey&apos;);
+      });
+      it(&apos;uses the correct collection&apos;, function () {
+        return expect(stubConnection.collection)
+          .to.have.been.calledWith(&apos;dev:bucket:people&apos;);
+      });
+      it(&apos;returns result from findOne&apos;, function () {
+        return expect(result).to.eql({
+          _id: 1
+        });
+      });
+      it(&apos;saves correct update&apos;, function () {
+        return expect(stubConnection.updateOne)
+          .to.have.been.calledWith({
+            _id: &quot;id&quot;
+          }, {
+            $set: {
+              _type: &quot;people&quot;,
+              _updatedDate: Date()
+            },
+            $setOnInsert: {
+              _createdDate: Date()
+            }
+          }, {
+            upsert: true
+          });
+      });
+    });
+  });
+  describe(&apos;without bucket&apos;, function () {
+
+    var findResults = [{
+      _id: 1
+    }, {
+      _id: 2
+    }];
+
+    function StubConnection() {
+      this.collection = sinon.stub().returnsThis();
+      this.db = sinon.stub().returnsThis();
+      this.find = sinon.stub().returnsThis();
+      this.findOne = sinon.stub().callsArgWith(1, null, findResults[0]);
+      this.toArray = sinon.stub().callsArgWith(0, null, findResults);
+      this.close = sinon.stub();
+    }
+
+
+    var context = new Context({
+      application: {
+        dataKey: &apos;datakey&apos;
+      },
+      environment: &apos;dev&apos;
+    });
+    /** @test {DataPipeline#find} */
+    describe(&apos;DataPipeline#find&apos;, function () {
+
+      let result;
+      let stubConnection;
+      before(function () {
+        stubConnection = new StubConnection();
+        sinon.stub(dataPipeline._connection, &apos;open&apos;).returns(Promise.resolve(stubConnection));
+        sinon.stub(Context, &apos;get&apos;).returns(Promise.resolve(context));
+        return dataPipeline.find(&apos;people&apos;, {
+          _id: &apos;id&apos;
+        }).then((r) =&gt; {
+          result = r;
+        });
+      });
+      after(function () {
+        dataPipeline._connection.open.restore();
+        Context.get.restore();
+      });
+      it(&apos;uses the application/environment db&apos;, function () {
+        return expect(stubConnection.db)
+          .to.have.been.calledWith(&apos;datakey&apos;);
+      });
+      it(&apos;uses the correct collection&apos;, function () {
+        return expect(stubConnection.collection)
+          .to.have.been.calledWith(&apos;dev:global:people&apos;);
+      });
+      it(&apos;returns result&apos;, function () {
+        expect(result).to.eql(findResults);
+      });
+      it(&apos;calls find&apos;, function () {
+        expect(stubConnection.find)
+          .to.have.been.calledWith({
+            _id: &apos;id&apos;
+          });
+      });
+      it(&apos;calls toArray&apos;, function () {
+        return expect(stubConnection.toArray)
+          .to.have.been.called;
+      });
+    });
+    /** @test {DataPipeline#findOne} */
+    describe(&apos;DataPipeline#findOne&apos;, function () {
+      var result;
+      let stubConnection;
+      before(function () {
+        stubConnection = new StubConnection();
+        sinon.stub(dataPipeline._connection, &apos;open&apos;).returns(Promise.resolve(stubConnection));
+        sinon.stub(Context, &apos;get&apos;).returns(Promise.resolve(context));
+        return dataPipeline.findOne(&apos;people&apos;, {
+          _id: &apos;id&apos;
+        }).then((r) =&gt; {
+          result = r;
+        });
+      });
+      after(function () {
+        dataPipeline._connection.open.restore();
+        Context.get.restore();
+      });
+      it(&apos;uses the application/environment db&apos;, function () {
+        return expect(stubConnection.db)
+          .to.have.been.calledWith(&apos;datakey&apos;);
+      });
+      it(&apos;uses the correct collection&apos;, function () {
+        return expect(stubConnection.collection)
+          .to.have.been.calledWith(&apos;dev:global:people&apos;);
+      });
+      it(&apos;returns result&apos;, function () {
+        expect(result).to.eql(findResults[0]);
+      });
+      it(&apos;calls findOne&apos;, function () {
+        expect(stubConnection.findOne)
+          .to.have.been.calledWith({
+            _id: &apos;id&apos;
+          });
+      });
+    });
+  });
+});
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.2)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">tests/unit_tests/mongo_connection_tests.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="git@github.com:hoist/hoist-data-pipeline.git">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/pipeline.js~DataPipeline.html">DataPipeline</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></li>
+</ul>
+</div>
+
+
+
+<div data-ice="functionWrap">
+  <h2><a href="function/">Function</a></h2>
+  <ul>
+    
+  <li data-ice="functionDoc"><span><a href="function/index.html#static-function-getCollectionName">getCollectionName</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-requiredFieldsTransformer">requiredFieldsTransformer</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-timestampsTransformer">timestampsTransformer</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">tests/unit_tests/mongo_connection_tests.js</h1>
+<pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
+import MongoConnection from &apos;../../src/mongo_connection&apos;;
+import sinon from &apos;sinon&apos;;
+import {
+  expect
+}
+from &apos;chai&apos;;
+
+/** @test {MongoConnection} */
+describe(&apos;MongoConnection&apos;, () =&gt; {
+  let mongoConnection;
+  before(() =&gt; {
+    mongoConnection = new MongoConnection();
+  });
+  /** @test {MongoConnection#open} */
+  describe(&apos;MongoConnection#open&apos;, () =&gt; {
+    describe(&apos;with existing connection&apos;, () =&gt; {
+      let connection = {};
+      let clock;
+      let result;
+      let originalTimeoutCalled = false;
+      before(() =&gt; {
+        clock = sinon.useFakeTimers();
+        mongoConnection._connection = connection;
+        mongoConnection._connectionTimeout = setTimeout(() =&gt; {
+          originalTimeoutCalled = true;
+        }, 100);
+        return mongoConnection.open().then((c) =&gt; {
+          result = c;
+        });
+      });
+      after(() =&gt; {
+        delete mongoConnection._connection;
+        clearTimeout(mongoConnection._connectionTimeout);
+        delete mongoConnection._connectionTimeout;
+        clock.restore();
+      });
+      it(&apos;reuses connection&apos;, () =&gt; {
+        return expect(result).to.eql(connection);
+      });
+      it(&apos;resets timeout&apos;, () =&gt; {
+        return Promise.resolve()
+          .then(() =&gt; {
+            clock.tick(1000);
+          }).then(() =&gt; {
+            return expect(originalTimeoutCalled).to.eql(false) &amp;&amp;
+              expect(mongoConnection._connectionTimeout).to.exist;
+          });
+      });
+    });
+    describe(&apos;without existing connection&apos;, () =&gt; {
+      let connection = {
+        closeAsync: sinon.stub().returns(Promise.resolve(null))
+      };
+      let clock;
+      let result;
+      before(() =&gt; {
+        clock = sinon.useFakeTimers();
+        sinon.stub(mongoConnection._mongoClient, &apos;connectAsync&apos;).returns(Promise.resolve(connection));
+        return mongoConnection.open().then((c) =&gt; {
+          result = c;
+        });
+      });
+      after(() =&gt; {
+        delete mongoConnection._connection;
+        clearTimeout(mongoConnection._connectionTimeout);
+        delete mongoConnection._connectionTimeout;
+        clock.restore();
+      });
+      it(&apos;returns connection&apos;, () =&gt; {
+        return expect(result).to.eql(connection);
+      });
+      it(&apos;saves connection&apos;, () =&gt; {
+        return expect(mongoConnection._connection).to.eql(connection);
+      });
+      it(&apos;sets timeout&apos;, () =&gt; {
+        return Promise.resolve()
+          .then(() =&gt; {
+            return expect(connection.closeAsync).to.not.have.been.called;
+          })
+          .then(() =&gt; {
+            clock.tick(2200);
+          }).then(() =&gt; {
+            return expect(connection.closeAsync).to.have.been.called;
+          }).then(() =&gt; {
+            return expect(mongoConnection._connection).to.not.exist;
+          }).then(() =&gt; {
+            mongoConnection._connection = connection;
+          });
+      });
+    });
+  });
+});
+</code></pre>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.1.2)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
