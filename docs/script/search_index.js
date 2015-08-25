@@ -547,38 +547,26 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber41",
-    "MongoConnection MongoConnection#open with existing connection resets timeout",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber38",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber32",
     "MongoConnection MongoConnection#open with existing connection reuses connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber51",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber36",
     "MongoConnection MongoConnection#open without existing connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber70",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber53",
     "MongoConnection MongoConnection#open without existing connection returns connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber73",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber56",
     "MongoConnection MongoConnection#open without existing connection saves connection",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber76",
-    "MongoConnection MongoConnection#open without existing connection sets timeout",
     "test"
   ],
   [

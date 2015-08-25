@@ -76,39 +76,25 @@ describe(&apos;MongoConnection&apos;, () =&gt; {
       let connection = {};
       let clock;
       let result;
-      let originalTimeoutCalled = false;
       before(() =&gt; {
         clock = sinon.useFakeTimers();
         mongoConnection._connection = connection;
-        mongoConnection._connectionTimeout = setTimeout(() =&gt; {
-          originalTimeoutCalled = true;
-        }, 100);
         return mongoConnection.open().then((c) =&gt; {
           result = c;
         });
       });
       after(() =&gt; {
         delete mongoConnection._connection;
-        clearTimeout(mongoConnection._connectionTimeout);
-        delete mongoConnection._connectionTimeout;
         clock.restore();
       });
       it(&apos;reuses connection&apos;, () =&gt; {
         return expect(result).to.eql(connection);
       });
-      it(&apos;resets timeout&apos;, () =&gt; {
-        return Promise.resolve()
-          .then(() =&gt; {
-            clock.tick(1000);
-          }).then(() =&gt; {
-            return expect(originalTimeoutCalled).to.eql(false) &amp;&amp;
-              expect(mongoConnection._connectionTimeout).to.exist;
-          });
-      });
     });
     describe(&apos;without existing connection&apos;, () =&gt; {
       let connection = {
-        closeAsync: sinon.stub().returns(Promise.resolve(null))
+        closeAsync: sinon.stub().returns(Promise.resolve(null)),
+        on: sinon.stub()
       };
       let clock;
       let result;
@@ -120,9 +106,6 @@ describe(&apos;MongoConnection&apos;, () =&gt; {
         });
       });
       after(() =&gt; {
-        delete mongoConnection._connection;
-        clearTimeout(mongoConnection._connectionTimeout);
-        delete mongoConnection._connectionTimeout;
         clock.restore();
       });
       it(&apos;returns connection&apos;, () =&gt; {
@@ -130,21 +113,6 @@ describe(&apos;MongoConnection&apos;, () =&gt; {
       });
       it(&apos;saves connection&apos;, () =&gt; {
         return expect(mongoConnection._connection).to.eql(connection);
-      });
-      it(&apos;sets timeout&apos;, () =&gt; {
-        return Promise.resolve()
-          .then(() =&gt; {
-            return expect(connection.closeAsync).to.not.have.been.called;
-          })
-          .then(() =&gt; {
-            clock.tick(2200);
-          }).then(() =&gt; {
-            return expect(connection.closeAsync).to.have.been.called;
-          }).then(() =&gt; {
-            return expect(mongoConnection._connection).to.not.exist;
-          }).then(() =&gt; {
-            mongoConnection._connection = connection;
-          });
       });
     });
   });

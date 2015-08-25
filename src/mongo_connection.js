@@ -18,34 +18,16 @@ class MongoConnection {
     });
   }
 
-
-  _clearTimeout() {
-    if (this._connectionTimeout) {
-      this._logger.info('clearing timeout');
-      clearTimeout(this._connectionTimeout);
-    }
-  }
-  _resetTimeout() {
-    if (this._connectionTimeout) {
-      this._logger.info('clearing timeout');
-      clearTimeout(this._connectionTimeout);
-    }
-    this._connectionTimeout = setTimeout(() => {
-      if (this._connection) {
-        this._connection.closeAsync();
-        delete this._connection;
-      }
-    }, 2000);
-  }
   _openConnection() {
-    this._clearTimeout();
     return this._mongoClient
       .connectAsync(config.get('Hoist.mongo.applications'))
       .then((connection) => {
         //close connection after 2 seconds of inactivity
-        this._resetTimeout();
         this._logger.info('connection opened');
         this._connection = connection;
+        this._connection.on('close', () => {
+          delete this._connection;
+        });
         Bluebird.promisifyAll(this._connection);
         return connection;
       });
@@ -59,7 +41,6 @@ class MongoConnection {
     if (!this._connection) {
       return Promise.resolve();
     }
-    this._clearTimeout();
     let connection = this._connection;
     delete this._connection;
     return connection.closeAsync();
@@ -71,7 +52,6 @@ class MongoConnection {
    */
   open() {
     if (this._connection) {
-      this._resetTimeout();
       return Promise.resolve(this._connection);
     } else {
       return this._openConnection();
