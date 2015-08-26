@@ -1,6 +1,6 @@
 'use strict';
 import util from 'util';
-import MongoConnection from './mongo_connection';
+import mongoConnection from './mongo_connection';
 import Context from '@hoist/context';
 import {
   requiredFieldsTransformer,
@@ -18,7 +18,7 @@ class DataPipeline {
    * create a new pipeline
    */
   constructor() {
-    this._connection = new MongoConnection();
+    this._connection = mongoConnection;
     let applicationId;
     let context = Context.current();
     if (context && context.application) {
@@ -157,5 +157,7 @@ class DataPipeline {
     });
   }
 }
+
+DataPipeline._mongoConnection = mongoConnection;
 
 export default DataPipeline;

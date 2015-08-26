@@ -6,12 +6,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@hoist/data-pipeline/src/mongo_connection.js~mongoconnection",
-    "class/src/mongo_connection.js~MongoConnection.html",
-    "<span>MongoConnection</span> <span class=\"search-result-import-path\">@hoist/data-pipeline/src/mongo_connection.js</span>",
-    "class"
-  ],
-  [
     "@hoist/data-pipeline/src/helpers.js~getcollectionname",
     "function/index.html#static-function-getCollectionName",
     "<span>getCollectionName</span> <span class=\"search-result-import-path\">@hoist/data-pipeline/src/helpers.js</span>",
@@ -528,44 +522,44 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
-    "mongoconnection src/mongo_connection.js~mongoconnection,mongoconnection",
+    "mongoconnection mongoconnection,mongoconnection",
     "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber10",
     "MongoConnection",
     "test"
   ],
   [
-    "mongoconnection#open src/mongo_connection.js~mongoconnection#open,mongoconnection#open",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber16",
+    "mongoconnection#open mongoconnection#open,mongoconnection#open",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber12",
     "MongoConnection MongoConnection#open",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber17",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber13",
     "MongoConnection MongoConnection#open with existing connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber32",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber28",
     "MongoConnection MongoConnection#open with existing connection reuses connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber36",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber32",
     "MongoConnection MongoConnection#open without existing connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber53",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber49",
     "MongoConnection MongoConnection#open without existing connection returns connection",
     "test"
   ],
   [
     "",
-    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber56",
+    "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber52",
     "MongoConnection MongoConnection#open without existing connection saves connection",
     "test"
   ],
@@ -580,24 +574,6 @@ window.esdocSearchIndex = [
     "file/src/mongo_connection.js.html",
     "src/mongo_connection.js",
     "file"
-  ],
-  [
-    "src/mongo_connection.js~mongoconnection#close",
-    "class/src/mongo_connection.js~MongoConnection.html#instance-method-close",
-    "src/mongo_connection.js~MongoConnection#close",
-    "method"
-  ],
-  [
-    "src/mongo_connection.js~mongoconnection#constructor",
-    "class/src/mongo_connection.js~MongoConnection.html#instance-constructor-constructor",
-    "src/mongo_connection.js~MongoConnection#constructor",
-    "method"
-  ],
-  [
-    "src/mongo_connection.js~mongoconnection#open",
-    "class/src/mongo_connection.js~MongoConnection.html#instance-method-open",
-    "src/mongo_connection.js~MongoConnection#open",
-    "method"
   ],
   [
     "src/pipeline.js",

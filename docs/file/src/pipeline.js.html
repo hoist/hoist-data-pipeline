@@ -32,7 +32,6 @@
   <ul>
     
   <li data-ice="classDoc"><span><a href="class/src/pipeline.js~DataPipeline.html">DataPipeline</a></span></li>
-<li data-ice="classDoc"><span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></li>
 </ul>
 </div>
 
@@ -58,7 +57,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/pipeline.js</h1>
 <pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
 import util from &apos;util&apos;;
-import MongoConnection from &apos;./mongo_connection&apos;;
+import mongoConnection from &apos;./mongo_connection&apos;;
 import Context from &apos;@hoist/context&apos;;
 import {
   requiredFieldsTransformer,
@@ -76,7 +75,7 @@ class DataPipeline {
    * create a new pipeline
    */
   constructor() {
-    this._connection = new MongoConnection();
+    this._connection = mongoConnection;
     let applicationId;
     let context = Context.current();
     if (context &amp;&amp; context.application) {
@@ -215,6 +214,8 @@ class DataPipeline {
     });
   }
 }
+
+DataPipeline._mongoConnection = mongoConnection;
 
 export default DataPipeline;
 </code></pre>

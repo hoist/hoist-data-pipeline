@@ -1,5 +1,5 @@
 'use strict';
-import MongoConnection from '../../src/mongo_connection';
+import mongoConnection from '../../src/mongo_connection';
 import sinon from 'sinon';
 import {
   expect
@@ -8,10 +8,6 @@ from 'chai';
 
 /** @test {MongoConnection} */
 describe('MongoConnection', () => {
-  let mongoConnection;
-  before(() => {
-    mongoConnection = new MongoConnection();
-  });
   /** @test {MongoConnection#open} */
   describe('MongoConnection#open', () => {
     describe('with existing connection', () => {

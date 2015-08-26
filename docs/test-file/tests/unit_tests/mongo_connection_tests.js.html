@@ -32,7 +32,6 @@
   <ul>
     
   <li data-ice="classDoc"><span><a href="class/src/pipeline.js~DataPipeline.html">DataPipeline</a></span></li>
-<li data-ice="classDoc"><span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></li>
 </ul>
 </div>
 
@@ -57,7 +56,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">tests/unit_tests/mongo_connection_tests.js</h1>
 <pre class="source-code line-number"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
-import MongoConnection from &apos;../../src/mongo_connection&apos;;
+import mongoConnection from &apos;../../src/mongo_connection&apos;;
 import sinon from &apos;sinon&apos;;
 import {
   expect
@@ -66,10 +65,6 @@ from &apos;chai&apos;;
 
 /** @test {MongoConnection} */
 describe(&apos;MongoConnection&apos;, () =&gt; {
-  let mongoConnection;
-  before(() =&gt; {
-    mongoConnection = new MongoConnection();
-  });
   /** @test {MongoConnection#open} */
   describe(&apos;MongoConnection#open&apos;, () =&gt; {
     describe(&apos;with existing connection&apos;, () =&gt; {
