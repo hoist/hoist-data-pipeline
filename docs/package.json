@@ -1,6 +1,6 @@
 {
   "name": "@hoist/data-pipeline",
-  "version": "2.0.0-pre.1",
+  "version": "2.0.0",
   "description": "Data pipeline between JSON data and Hoist Data Store",
   "main": "lib/pipeline.js",
   "scripts": {
@@ -16,10 +16,6 @@
     "url": "https://github.com/hoist/hoist-data-pipeline/issues"
   },
   "homepage": "https://github.com/hoist/hoist-data-pipeline",
-  "peerDependencies": {
-    "@hoist/context": "^1.0.1",
-    "@hoist/model": "^1.0.2"
-  },
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-eslint": "^5.0.0",
@@ -53,8 +49,11 @@
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
+    "@hoist/context": "^1.0.4",
     "@hoist/errors": "^2.0.1",
     "@hoist/logger": "^1.1.0",
+    "@hoist/model": "^2.0.0",
+    "babel-preset-es2015": "^6.6.0",
     "bluebird": "^3.3.4",
     "config": "^1.19.0",
     "lodash": "^4.6.1",
