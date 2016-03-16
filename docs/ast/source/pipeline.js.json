@@ -11655,26 +11655,9 @@
           "column": 1
         }
       },
-      "leadingComments": [
-        {
-          "type": "Block",
-          "value": "*\n * application data api pipeline\n ",
-          "range": [
-            299,
-            339
-          ],
-          "loc": {
-            "start": {
-              "line": 13,
-              "column": 0
-            },
-            "end": {
-              "line": 15,
-              "column": 3
-            }
-          }
-        }
-      ]
+      "leadingComments": [],
+      "name": "_",
+      "trailingComments": []
     },
     {
       "type": "ExpressionStatement",
@@ -11782,6 +11765,44 @@
           "column": 48
         }
       }
+    },
+    {
+      "type": "Identifier",
+      "declaration": {
+        "type": "Identifier",
+        "name": "DataPipeline",
+        "range": [
+          5071,
+          5083
+        ],
+        "loc": {
+          "start": {
+            "line": 163,
+            "column": 15
+          },
+          "end": {
+            "line": 163,
+            "column": 27
+          }
+        }
+      },
+      "range": [
+        5056,
+        5084
+      ],
+      "loc": {
+        "start": {
+          "line": 163,
+          "column": 0
+        },
+        "end": {
+          "line": 163,
+          "column": 28
+        }
+      },
+      "name": "_",
+      "leadingComments": [],
+      "trailingComments": []
     },
     {
       "type": "ExportDefaultDeclaration",
@@ -22841,6 +22862,7 @@
             }
           }
         ],
+        "__esdoc__pseudo_export": false,
         "trailingComments": []
       },
       "range": [
@@ -22856,7 +22878,8 @@
           "line": 163,
           "column": 28
         }
-      }
+      },
+      "leadingComments": null
     }
   ],
   "sourceType": "module",

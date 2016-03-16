@@ -1,15 +1,24 @@
 {
-  "coverage": "100%",
-  "expectCount": 9,
-  "actualCount": 9,
+  "coverage": "92.85%",
+  "expectCount": 14,
+  "actualCount": 13,
   "files": {
     "src/pipeline.js": {
       "expectCount": 6,
-      "actualCount": 6
+      "actualCount": 6,
+      "undocumentLines": []
+    },
+    "src/mongo_connection.js": {
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        63
+      ]
     },
     "src/helpers.js": {
       "expectCount": 3,
-      "actualCount": 3
+      "actualCount": 3,
+      "undocumentLines": []
     }
   }
 }

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/helpers.js | API Document</title>
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Variable | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -42,61 +42,82 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/helpers.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
-import pluralize from &apos;pluralize&apos;;
-import shortid from &apos;shortid&apos;;
+<div class="content" data-ice="content"><h1 data-ice="title">Variable</h1>
+<div data-ice="summaries"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Static Public Summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="variable/index.html#static-variable-mongoConnection">mongoConnection</a></span></span><span data-ice="signature">: <span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
-/**
- * given a type and context resolve the collection name
- * @param {string} type - this instance type
- * @param {object} context - the current context
- * @returns {string} the collection name to use
- */
-export function getCollectionName(type, context) {
-  var bucketId = &apos;global&apos;;
-  if (context.bucket) {
-    bucketId = context.bucket._id;
-  }
-  return context.environment + &quot;:&quot; + bucketId + &quot;:&quot; + pluralize(type).toLowerCase();
-}
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-variable-mongoConnection">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">mongoConnection</span><span data-ice="signature">: <span><a href="class/src/mongo_connection.js~MongoConnection.html">MongoConnection</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/mongo_connection.js.html#lineNumber63">source</a></span></span>
+    </span>
+  </h3>
 
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import mongoConnection from &apos;<span><a href="file/src/mongo_connection.js.html#lineNumber63">@hoist/data-pipeline/src/mongo_connection.js</a></span>&apos;</code></pre></div>
+  
+  
+  
 
-function ensureId(json) {
-  if (!json._id) {
-    json._id = shortid();
-  }
-  return json;
-}
+  
 
-function ensureType(type, json) {
-  json._type = type.toLowerCase();
-  return json;
-}
+  <div data-ice="properties">
+</div>
 
-/**
- * adds any required fields to the instance
- * @param {string} type - the type of the instance
- * @param {object} instance - the instance to transform
- * @returns {object} the transformed instance
- */
-export function requiredFieldsTransformer(type, instance) {
-  return ensureId(ensureType(type, instance));
-}
+  
 
-/**
- * adds timestamps to an instance
- * @param {object} instance - the instance to transform
- * @returns {object} the transformed instance
- */
+  
 
-export function timestampsTransformer(instance) {
-  instance._createdDate = new Date();
-  instance._updatedDate = new Date();
-  return instance;
-}
-</code></pre>
+  
 
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 </div>
 
 <footer class="footer">

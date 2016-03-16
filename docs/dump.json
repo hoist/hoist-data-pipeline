@@ -1,5 +1,6 @@
 [
   {
+    "__docId__": 0,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -12,6 +13,7 @@
     "content": "'use strict';\nimport pluralize from 'pluralize';\nimport shortid from 'shortid';\n\n/**\n * given a type and context resolve the collection name\n * @param {string} type - this instance type\n * @param {object} context - the current context\n * @returns {string} the collection name to use\n */\nexport function getCollectionName(type, context) {\n  var bucketId = 'global';\n  if (context.bucket) {\n    bucketId = context.bucket._id;\n  }\n  return context.environment + \":\" + bucketId + \":\" + pluralize(type).toLowerCase();\n}\n\n\nfunction ensureId(json) {\n  if (!json._id) {\n    json._id = shortid();\n  }\n  return json;\n}\n\nfunction ensureType(type, json) {\n  json._type = type.toLowerCase();\n  return json;\n}\n\n/**\n * adds any required fields to the instance\n * @param {string} type - the type of the instance\n * @param {object} instance - the instance to transform\n * @returns {object} the transformed instance\n */\nexport function requiredFieldsTransformer(type, instance) {\n  return ensureId(ensureType(type, instance));\n}\n\n/**\n * adds timestamps to an instance\n * @param {object} instance - the instance to transform\n * @returns {object} the transformed instance\n */\n\nexport function timestampsTransformer(instance) {\n  instance._createdDate = new Date();\n  instance._updatedDate = new Date();\n  return instance;\n}\n"
   },
   {
+    "__docId__": 1,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -63,6 +65,7 @@
     "generator": false
   },
   {
+    "__docId__": 2,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -92,6 +95,7 @@
     "generator": false
   },
   {
+    "__docId__": 3,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -127,6 +131,7 @@
     "generator": false
   },
   {
+    "__docId__": 4,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -178,6 +183,7 @@
     "generator": false
   },
   {
+    "__docId__": 5,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -219,6 +225,7 @@
     "generator": false
   },
   {
+    "__docId__": 6,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -231,6 +238,7 @@
     "content": "'use strict';\nimport Bluebird from 'bluebird';\nimport mongodb from 'mongodb';\nimport config from 'config';\nimport logger from '@hoist/logger';\nBluebird.promisifyAll(mongodb.MongoClient);\n/**\n * marshalling class for connection to mongodb\n */\nclass MongoConnection {\n  /**\n   * create a new instance\n   */\n  constructor() {\n    this._mongoClient = mongodb.MongoClient;\n    this._logger = logger.child({\n      cls: this.constructor.name\n    });\n  }\n\n  _openConnection() {\n    return this._mongoClient\n      .connectAsync(config.get('Hoist.mongo.applications'))\n      .then((connection) => {\n        //close connection after 2 seconds of inactivity\n        this._logger.info('connection opened');\n        this._connection = connection;\n        this._connection.on('close', () => {\n          delete this._connection;\n        });\n        Bluebird.promisifyAll(this._connection);\n        return connection;\n      });\n  }\n\n  /**\n   * close any open connection to mongo\n   * @returns {Promise}\n   */\n  close() {\n    if (!this._connection) {\n      return Promise.resolve();\n    }\n    let connection = this._connection;\n    delete this._connection;\n    return connection.closeAsync();\n  }\n\n  /**\n   * Attempt to reuse mongo connection or open one if it doesn't exist\n   * @returns {Promise}\n   */\n  open() {\n    if (this._connection) {\n      return Promise.resolve(this._connection);\n    } else {\n      return this._openConnection();\n    }\n\n  }\n}\n\nexport default new MongoConnection();\n"
   },
   {
+    "__docId__": 7,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -238,14 +246,16 @@
     "memberof": "src/mongo_connection.js",
     "longname": "src/mongo_connection.js~MongoConnection",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
     "importStyle": null,
     "description": "marshalling class for connection to mongodb",
     "lineNumber": 10,
+    "pseudoExport": true,
     "interface": false
   },
   {
+    "__docId__": 8,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -259,6 +269,7 @@
     "generator": false
   },
   {
+    "__docId__": 9,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -276,6 +287,7 @@
     }
   },
   {
+    "__docId__": 10,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -293,6 +305,7 @@
     }
   },
   {
+    "__docId__": 11,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -312,6 +325,7 @@
     "generator": false
   },
   {
+    "__docId__": 12,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -329,6 +343,7 @@
     }
   },
   {
+    "__docId__": 13,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -356,6 +371,7 @@
     "generator": false
   },
   {
+    "__docId__": 14,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -383,6 +399,28 @@
     "generator": false
   },
   {
+    "__docId__": 15,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "mongoConnection",
+    "memberof": "src/mongo_connection.js",
+    "longname": "src/mongo_connection.js~mongoConnection",
+    "access": null,
+    "export": true,
+    "importPath": "@hoist/data-pipeline/src/mongo_connection.js",
+    "importStyle": "mongoConnection",
+    "description": null,
+    "lineNumber": 63,
+    "undocument": true,
+    "type": {
+      "types": [
+        "src/mongo_connection.js~MongoConnection"
+      ]
+    }
+  },
+  {
+    "__docId__": 16,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -395,6 +433,7 @@
     "content": "'use strict';\nimport util from 'util';\nimport mongoConnection from './mongo_connection';\nimport Context from '@hoist/context';\nimport {\n  requiredFieldsTransformer,\n  timestampsTransformer,\n  getCollectionName\n}\nfrom './helpers';\nimport Bluebird from 'bluebird';\nimport logger from '@hoist/logger';\n/**\n * application data api pipeline\n */\nclass DataPipeline {\n  /**\n   * create a new pipeline\n   */\n  constructor() {\n    this._connection = mongoConnection;\n    let applicationId;\n    let context = Context.current();\n    if (context && context.application) {\n      applicationId = context.application._id;\n    }\n    this._logger = logger.child({\n      cls: this.constructor.name,\n      applicationId: applicationId\n    });\n  }\n\n  /**\n   * save an object or set of objects as a type\n   * @param {string} type - the object types\n   * @param {object|Array<object>} objOrArray - the object(s) to save\n   * @returns {Promise}\n   */\n  save(type, objOrArray) {\n    var arrayObj = [].concat(objOrArray);\n    this._logger.info('saving data');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection');\n      return this._connection.open().then((connection) => {\n        return Promise.all(arrayObj.map((obj) => {\n          return Promise.resolve(requiredFieldsTransformer(type, obj))\n            .then((data) => {\n              return timestampsTransformer(data);\n            }).then((data) => {\n              this._logger.info('sending to mongo');\n              var db = connection.db(context.application.dataKey);\n              var collection = Bluebird.promisifyAll(db.collection(getCollectionName(data._type, context)));\n              var createdDate = new Date();\n              if (data._createdDate) {\n                createdDate = data._createdDate;\n                delete data._createdDate;\n              }\n              var id = data._id;\n              delete data._id;\n              return collection.updateOneAsync({\n                _id: id\n              }, {\n                $set: data,\n                $setOnInsert: {\n                  _createdDate: createdDate\n                }\n              }, {\n                upsert: true\n              }).then(() => {\n                this._logger.info('finding post save');\n                return collection.findOneAsync({\n                  _id: id\n                });\n              });\n            });\n\n        }));\n      });\n    }).then((savedData) => {\n      if (!util.isArray(objOrArray)) {\n        if (savedData.length < 2) {\n          if (savedData.length < 1) {\n            return null;\n          } else {\n            return savedData[0];\n          }\n        }\n      }\n      return savedData;\n    });\n  }\n\n  /**\n   * finds all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  find(type, query) {\n    this._logger.info('finding data');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection data');\n      return this._connection.open().then((connection) => {\n        //throw new Error();\n        var db = connection.db(context.application.dataKey);\n        var collection = db.collection(getCollectionName(type, context));\n        return Bluebird.promisifyAll(collection.find(query)).toArrayAsync()\n          .then((results) => {\n            this._logger.info('retrieved data');\n            return Promise.resolve(results);\n          });\n      });\n    });\n  }\n\n  /**\n   * finds a single object of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  findOne(type, query) {\n    this._logger.info('finding single');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection');\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.findOneAsync(query)\n          .then((results) => {\n            this._logger.info('retrieved data');\n            return results;\n          });\n      });\n    });\n  }\n\n  /**\n   * removes all objects of type matching the given query\n   * @param {string} type - the object types\n   * @param {object} query - a mongo style query\n   * @returns {Promise}\n   */\n  remove(type, query) {\n    this._logger.info('removing data');\n    return Context.get().then((context) => {\n      this._logger.info('opening connection');\n      return this._connection.open().then((connection) => {\n        var db = connection.db(context.application.dataKey);\n        var collection = Bluebird.promisifyAll(db.collection(getCollectionName(type, context)));\n        return collection.removeAsync(query)\n          .then((results) => {\n            this._logger.info('removed data');\n            return results;\n          });\n      });\n    });\n  }\n}\n\nDataPipeline._mongoConnection = mongoConnection;\n\nexport default DataPipeline;\n"
   },
   {
+    "__docId__": 17,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -410,6 +449,7 @@
     "interface": false
   },
   {
+    "__docId__": 18,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -423,6 +463,7 @@
     "generator": false
   },
   {
+    "__docId__": 19,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -440,6 +481,7 @@
     }
   },
   {
+    "__docId__": 20,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -457,6 +499,7 @@
     }
   },
   {
+    "__docId__": 21,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -486,7 +529,8 @@
       {
         "nullable": null,
         "types": [
-          "object|Array<object>"
+          "object",
+          "Array<object>"
         ],
         "spread": false,
         "optional": false,
@@ -505,6 +549,7 @@
     "generator": false
   },
   {
+    "__docId__": 22,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -553,6 +598,7 @@
     "generator": false
   },
   {
+    "__docId__": 23,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -601,6 +647,7 @@
     "generator": false
   },
   {
+    "__docId__": 24,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -649,6 +696,7 @@
     "generator": false
   },
   {
+    "__docId__": 26,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -657,10 +705,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 27,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -669,10 +718,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 28,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -681,10 +731,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 29,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -693,10 +744,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 30,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -705,10 +757,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 31,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -717,10 +770,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 32,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -729,10 +783,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 33,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -741,10 +796,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 34,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -753,10 +809,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 35,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -765,10 +822,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 36,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -777,10 +835,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 37,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -789,10 +848,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 38,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -801,10 +861,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 39,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -813,10 +874,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 40,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -825,10 +887,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 41,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -837,10 +900,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 42,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -849,10 +913,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 43,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -861,10 +926,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 44,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -873,10 +939,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 45,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -885,10 +952,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 46,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -897,10 +965,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 47,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -909,10 +978,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 48,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -921,10 +991,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 49,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -933,10 +1004,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 50,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -945,10 +1017,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 51,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -957,10 +1030,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 52,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -969,10 +1043,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 53,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -981,10 +1056,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 54,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -993,10 +1069,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 55,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1005,10 +1082,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 56,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1017,10 +1095,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 57,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1029,10 +1108,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 58,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1041,10 +1121,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 59,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1053,10 +1134,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 60,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1065,10 +1147,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 61,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1077,10 +1160,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 62,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1089,10 +1173,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 63,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1101,10 +1186,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 64,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1113,10 +1199,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 65,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1125,10 +1212,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 66,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1137,10 +1225,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 67,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1149,10 +1238,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 68,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1161,10 +1251,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 69,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1173,10 +1264,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 70,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1185,10 +1277,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 71,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1197,10 +1290,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 72,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1209,10 +1303,11 @@
     "memberof": "BuiltinExternal/ECMAScriptExternal.js",
     "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 74,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1221,10 +1316,11 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 75,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1233,10 +1329,11 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 76,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1245,10 +1342,11 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~Element",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 77,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1257,10 +1355,11 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~Event",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 78,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1269,10 +1368,11 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~Node",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 79,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1281,10 +1381,11 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 80,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1293,10 +1394,24 @@
     "memberof": "BuiltinExternal/WebAPIExternal.js",
     "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
     "access": null,
-    "description": null,
+    "description": "",
     "builtinExternal": true
   },
   {
+    "__docId__": 81,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "AudioContext",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 82,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -1309,6 +1424,7 @@
     "content": "'use strict';\nimport mongoConnection from '../../src/mongo_connection';\nimport sinon from 'sinon';\nimport {\n  expect\n}\nfrom 'chai';\n\n/** @test {MongoConnection} */\ndescribe('MongoConnection', () => {\n  /** @test {MongoConnection#open} */\n  describe('MongoConnection#open', () => {\n    describe('with existing connection', () => {\n      let connection = {};\n      let clock;\n      let result;\n      before(() => {\n        clock = sinon.useFakeTimers();\n        mongoConnection._connection = connection;\n        return mongoConnection.open().then((c) => {\n          result = c;\n        });\n      });\n      after(() => {\n        delete mongoConnection._connection;\n        clock.restore();\n      });\n      it('reuses connection', () => {\n        return expect(result).to.eql(connection);\n      });\n    });\n    describe('without existing connection', () => {\n      let connection = {\n        closeAsync: sinon.stub().returns(Promise.resolve(null)),\n        on: sinon.stub()\n      };\n      let clock;\n      let result;\n      before(() => {\n        clock = sinon.useFakeTimers();\n        sinon.stub(mongoConnection._mongoClient, 'connectAsync').returns(Promise.resolve(connection));\n        return mongoConnection.open().then((c) => {\n          result = c;\n        });\n      });\n      after(() => {\n        clock.restore();\n      });\n      it('returns connection', () => {\n        return expect(result).to.eql(connection);\n      });\n      it('saves connection', () => {\n        return expect(mongoConnection._connection).to.eql(connection);\n      });\n    });\n  });\n});\n"
   },
   {
+    "__docId__": 83,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1331,6 +1447,7 @@
     ]
   },
   {
+    "__docId__": 84,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1353,6 +1470,7 @@
     ]
   },
   {
+    "__docId__": 85,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1366,6 +1484,7 @@
     "lineNumber": 13
   },
   {
+    "__docId__": 86,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1379,6 +1498,7 @@
     "lineNumber": 28
   },
   {
+    "__docId__": 87,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1392,6 +1512,7 @@
     "lineNumber": 32
   },
   {
+    "__docId__": 88,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1405,6 +1526,7 @@
     "lineNumber": 49
   },
   {
+    "__docId__": 89,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1418,6 +1540,7 @@
     "lineNumber": 52
   },
   {
+    "__docId__": 90,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -1430,6 +1553,7 @@
     "content": "'use strict';\nimport sinon from 'sinon';\nimport Context from '@hoist/context';\nimport {\n  expect\n}\nfrom 'chai';\nimport Pipeline from '../../src/pipeline';\n/** @test {DataPipeline} */\ndescribe('DataPipeline', function () {\n  let dataPipeline;\n  before(() => {\n    dataPipeline = new Pipeline();\n  });\n  describe('with bucket', function () {\n    var findResults = [{\n      _id: 1\n    }, {\n      _id: 2\n    }];\n\n    function StubConnection() {\n      this.collection = sinon.stub().returnsThis();\n      this.db = sinon.stub().returnsThis();\n      this.find = sinon.stub().returnsThis();\n      this.findOne = sinon.stub().yields(null, findResults[0]);\n      this.toArray = sinon.stub().yields(null, findResults);\n      this.updateOne = sinon.stub().yields();\n      this.close = sinon.stub();\n    }\n    var context = new Context({\n      application: {\n        dataKey: 'datakey'\n      },\n      environment: 'dev',\n      bucket: {\n        _id: 'bucket'\n      }\n    });\n    /** @test {DataPipeline#find} */\n    describe('DataPipeline#find', function () {\n      var result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.find('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:bucket:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults);\n      });\n      it('calls find', function () {\n        expect(stubConnection.find)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n    });\n    /** @test {DataPipeline#findOne} */\n    describe('DataPipeline#findOne', function () {\n      let result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.findOne('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:bucket:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults[0]);\n      });\n      it('calls findOne with correct id', function () {\n        expect(stubConnection.findOne)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n    });\n    describe('DataPipeline#save', function () {\n      var result;\n      let stubConnection;\n      let clock;\n      before(function () {\n        clock = sinon.useFakeTimers();\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.save('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        clock.restore();\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:bucket:people');\n      });\n      it('returns result from findOne', function () {\n        return expect(result).to.eql({\n          _id: 1\n        });\n      });\n      it('saves correct update', function () {\n        return expect(stubConnection.updateOne)\n          .to.have.been.calledWith({\n            _id: \"id\"\n          }, {\n            $set: {\n              _type: \"people\",\n              _updatedDate: Date()\n            },\n            $setOnInsert: {\n              _createdDate: Date()\n            }\n          }, {\n            upsert: true\n          });\n      });\n    });\n  });\n  describe('without bucket', function () {\n\n    var findResults = [{\n      _id: 1\n    }, {\n      _id: 2\n    }];\n\n    function StubConnection() {\n      this.collection = sinon.stub().returnsThis();\n      this.db = sinon.stub().returnsThis();\n      this.find = sinon.stub().returnsThis();\n      this.findOne = sinon.stub().callsArgWith(1, null, findResults[0]);\n      this.toArray = sinon.stub().callsArgWith(0, null, findResults);\n      this.close = sinon.stub();\n    }\n\n\n    var context = new Context({\n      application: {\n        dataKey: 'datakey'\n      },\n      environment: 'dev'\n    });\n    /** @test {DataPipeline#find} */\n    describe('DataPipeline#find', function () {\n\n      let result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.find('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:global:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults);\n      });\n      it('calls find', function () {\n        expect(stubConnection.find)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n      it('calls toArray', function () {\n        return expect(stubConnection.toArray)\n          .to.have.been.called;\n      });\n    });\n    /** @test {DataPipeline#findOne} */\n    describe('DataPipeline#findOne', function () {\n      var result;\n      let stubConnection;\n      before(function () {\n        stubConnection = new StubConnection();\n        sinon.stub(dataPipeline._connection, 'open').returns(Promise.resolve(stubConnection));\n        sinon.stub(Context, 'get').returns(Promise.resolve(context));\n        return dataPipeline.findOne('people', {\n          _id: 'id'\n        }).then((r) => {\n          result = r;\n        });\n      });\n      after(function () {\n        dataPipeline._connection.open.restore();\n        Context.get.restore();\n      });\n      it('uses the application/environment db', function () {\n        return expect(stubConnection.db)\n          .to.have.been.calledWith('datakey');\n      });\n      it('uses the correct collection', function () {\n        return expect(stubConnection.collection)\n          .to.have.been.calledWith('dev:global:people');\n      });\n      it('returns result', function () {\n        expect(result).to.eql(findResults[0]);\n      });\n      it('calls findOne', function () {\n        expect(stubConnection.findOne)\n          .to.have.been.calledWith({\n            _id: 'id'\n          });\n      });\n    });\n  });\n});\n"
   },
   {
+    "__docId__": 91,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1452,6 +1576,7 @@
     ]
   },
   {
+    "__docId__": 92,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1465,6 +1590,7 @@
     "lineNumber": 15
   },
   {
+    "__docId__": 93,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1487,6 +1613,7 @@
     ]
   },
   {
+    "__docId__": 94,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1500,6 +1627,7 @@
     "lineNumber": 58
   },
   {
+    "__docId__": 95,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1513,6 +1641,7 @@
     "lineNumber": 62
   },
   {
+    "__docId__": 96,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1526,6 +1655,7 @@
     "lineNumber": 66
   },
   {
+    "__docId__": 97,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1539,6 +1669,7 @@
     "lineNumber": 69
   },
   {
+    "__docId__": 98,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1561,6 +1692,7 @@
     ]
   },
   {
+    "__docId__": 99,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1574,6 +1706,7 @@
     "lineNumber": 94
   },
   {
+    "__docId__": 100,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1587,6 +1720,7 @@
     "lineNumber": 98
   },
   {
+    "__docId__": 101,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1600,6 +1734,7 @@
     "lineNumber": 102
   },
   {
+    "__docId__": 102,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1613,6 +1748,7 @@
     "lineNumber": 105
   },
   {
+    "__docId__": 103,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1626,6 +1762,7 @@
     "lineNumber": 112
   },
   {
+    "__docId__": 104,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1639,6 +1776,7 @@
     "lineNumber": 132
   },
   {
+    "__docId__": 105,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1652,6 +1790,7 @@
     "lineNumber": 136
   },
   {
+    "__docId__": 106,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1665,6 +1804,7 @@
     "lineNumber": 140
   },
   {
+    "__docId__": 107,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1678,6 +1818,7 @@
     "lineNumber": 145
   },
   {
+    "__docId__": 108,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1691,6 +1832,7 @@
     "lineNumber": 163
   },
   {
+    "__docId__": 109,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1713,6 +1855,7 @@
     ]
   },
   {
+    "__docId__": 110,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1726,6 +1869,7 @@
     "lineNumber": 206
   },
   {
+    "__docId__": 111,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1739,6 +1883,7 @@
     "lineNumber": 210
   },
   {
+    "__docId__": 112,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1752,6 +1897,7 @@
     "lineNumber": 214
   },
   {
+    "__docId__": 113,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1765,6 +1911,7 @@
     "lineNumber": 217
   },
   {
+    "__docId__": 114,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1778,6 +1925,7 @@
     "lineNumber": 223
   },
   {
+    "__docId__": 115,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1800,6 +1948,7 @@
     ]
   },
   {
+    "__docId__": 116,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1813,6 +1962,7 @@
     "lineNumber": 246
   },
   {
+    "__docId__": 117,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1826,6 +1976,7 @@
     "lineNumber": 250
   },
   {
+    "__docId__": 118,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1839,6 +1990,7 @@
     "lineNumber": 254
   },
   {
+    "__docId__": 119,
     "kind": "testIt",
     "static": true,
     "variation": null,

@@ -6,10 +6,22 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@hoist/data-pipeline/src/mongo_connection.js~mongoconnection",
+    "class/src/mongo_connection.js~MongoConnection.html",
+    "<span>MongoConnection</span> <span class=\"search-result-import-path\">@hoist/data-pipeline/src/mongo_connection.js</span>",
+    "class"
+  ],
+  [
     "@hoist/data-pipeline/src/helpers.js~getcollectionname",
     "function/index.html#static-function-getCollectionName",
     "<span>getCollectionName</span> <span class=\"search-result-import-path\">@hoist/data-pipeline/src/helpers.js</span>",
     "function"
+  ],
+  [
+    "@hoist/data-pipeline/src/mongo_connection.js~mongoconnection",
+    "variable/index.html#static-variable-mongoConnection",
+    "<span>mongoConnection</span> <span class=\"search-result-import-path\">@hoist/data-pipeline/src/mongo_connection.js</span>",
+    "variable"
   ],
   [
     "@hoist/data-pipeline/src/helpers.js~requiredfieldstransformer",
@@ -306,6 +318,12 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "builtinexternal/webapiexternal.js~audiocontext",
+    "external/index.html",
+    "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "external"
+  ],
+  [
     "builtinexternal/webapiexternal.js~canvasrenderingcontext2d",
     "external/index.html",
     "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
@@ -522,13 +540,13 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
-    "mongoconnection mongoconnection,mongoconnection",
+    "mongoconnection src/mongo_connection.js~mongoconnection,mongoconnection",
     "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber10",
     "MongoConnection",
     "test"
   ],
   [
-    "mongoconnection#open mongoconnection#open,mongoconnection#open",
+    "mongoconnection#open src/mongo_connection.js~mongoconnection#open,mongoconnection#open",
     "test-file/tests/unit_tests/mongo_connection_tests.js.html#lineNumber12",
     "MongoConnection MongoConnection#open",
     "test"
@@ -574,6 +592,24 @@ window.esdocSearchIndex = [
     "file/src/mongo_connection.js.html",
     "src/mongo_connection.js",
     "file"
+  ],
+  [
+    "src/mongo_connection.js~mongoconnection#close",
+    "class/src/mongo_connection.js~MongoConnection.html#instance-method-close",
+    "src/mongo_connection.js~MongoConnection#close",
+    "method"
+  ],
+  [
+    "src/mongo_connection.js~mongoconnection#constructor",
+    "class/src/mongo_connection.js~MongoConnection.html#instance-constructor-constructor",
+    "src/mongo_connection.js~MongoConnection#constructor",
+    "method"
+  ],
+  [
+    "src/mongo_connection.js~mongoconnection#open",
+    "class/src/mongo_connection.js~MongoConnection.html#instance-method-open",
+    "src/mongo_connection.js~MongoConnection#open",
+    "method"
   ],
   [
     "src/pipeline.js",
